@@ -1,0 +1,15 @@
+Package: terrapin
+Type: Package
+Title: Easily Manipulate Dates from the terra Package
+Version: 0.0.0.1
+Authors@R: 
+    person("Dominic" "Saunderson", "dominicsaunderson@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7440-0101"))
+Description: The terrapin package is a personal package that slightly builds on 
+    the [terra](https://rspatial.org) package. It is mainly composed of 
+    functions that allow me to easily subset SpatRasters based on their dates in 
+    different ways.
+License: GPL (>= 2)
+Encoding: UTF-8
+RoxygenNote: 7.2.3
