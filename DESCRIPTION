@@ -13,3 +13,5 @@ Description: The terrapin package is a personal package that slightly builds on
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.2.3
+Imports:
+  terra
