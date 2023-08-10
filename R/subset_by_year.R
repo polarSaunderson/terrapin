@@ -24,7 +24,7 @@ subset_by_year <- function(x, years) {
 
   # Code -----------------------------------------------------------------------
   # Get dates of each layer
-  xDates <- get_terra_dates(x, australSplit = NULL)
+  xDates <- get_terra_dates(x, australSplit = FALSE)
 
   # Identify relevant layers
   yearlyIndex <- which(xDates$year %in% years)

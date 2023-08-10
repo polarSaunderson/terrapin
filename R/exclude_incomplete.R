@@ -82,7 +82,7 @@ exclude_incomplete_years <- function(x,
 
   # Code ----------------------------------------------------------------------!
   # Basic date information
-  xDates     <- get_terra_dates(x, australSplit = NULL)
+  xDates     <- get_terra_dates(x, australSplit = FALSE)
   xYears     <- xDates$year |> unique() |> sort()
   incYears   <- c()
 
@@ -158,7 +158,12 @@ exclude_incomplete_summers <- function(x,
   #'
   #' @inherit exclude_incomplete_years description
   #' @inheritParams exclude_incomplete_years
-  #' @inheritParams get_terra_dates
+  #' @param australSplit numeric: Which is the last month included in an austral
+  #'   summer before the new austral year begins? The default value is 3, which
+  #'   means that all months *AFTER* March are considered as part of the
+  #'   following summer (i.e. April 1991 -- March 1992 are all in 1992). Swap
+  #'   this value according: setting it as 4 means May 1991 -- April 1992 are
+  #'   all 1992.
   #'
   #' @export
 
@@ -166,13 +171,12 @@ exclude_incomplete_summers <- function(x,
   # Basic date information
   xDates     <- get_terra_dates(x, australSplit = australSplit)
   xSummers   <- xDates$summer |> unique() |> sort()
-  xMonths    <- xDates$month |> unique() |> sort()
-  xMonthDays <- xDates$monthDay |> unique() |> sort()
   incSummers <- c()
 
   # exclude Incomplete Summers
   # print("removing summers")
   if (isTRUE(daily)) {
+    xMonthDays <- xDates$monthDay |> unique() |> sort()
     for (ii in xSummers) {
       iiData      <- xDates[which(xDates$summer == ii), ]
       iiMonthDays <- iiData$monthDay |> unique() |> sort()
@@ -185,6 +189,7 @@ exclude_incomplete_summers <- function(x,
     }
     messageBit <- "month-day combination"
   } else if (isFALSE(daily)) {
+    xMonths    <- xDates$month |> unique() |> sort()
     for (ii in xSummers) {
       iiData   <- xDates[which(xDates$summer == ii), ]
       iiMonths <- iiData$month |> unique() |> sort()
@@ -199,7 +204,7 @@ exclude_incomplete_summers <- function(x,
   }
 
   # Stop and throw warning if no data is suitable
-  if (length(incYears) == 0) {
+  if (length(incSummers) == 0) {
     cat("\n")
     warning(paste("No", messageBit, "is found in all summers of this dataset!\n"))
     return("No data returned by exclude_incomplete_summers")

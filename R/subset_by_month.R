@@ -15,7 +15,7 @@ subset_by_month <- function(x, months,
   #'   once (e.g. c(12, 1, 2)), but do not try to mix strings and numbers in the
   #'   vector.
   #' @param excludeIncomplete Be careful using this argument, it can
-  #'   dramatically affect the output of this function. If the value is "years",
+  #'   dramatically affect the output of this function. If the value is TRUE,
   #'   the data is run through `exclude_incomplete_years()`, and only months in
   #'   years with all requested months in are returned. If the value is numeric
   #'   (between 1 and 12), the data is fed into the
@@ -39,7 +39,7 @@ subset_by_month <- function(x, months,
   }
 
   # Get dates of each layer
-  xDates <- get_terra_dates(x, australSplit = NULL)
+  xDates <- get_terra_dates(x, australSplit = excludeIncomplete)
 
   # Identify relevant layers
   monthlyIndex <- which(xDates$month %in% months)
@@ -48,11 +48,11 @@ subset_by_month <- function(x, months,
   xSubset <- terra::subset(x, monthlyIndex)
 
   # Remove any summers or years without all of the necessary months
-  if ("numeric" %in% is(removeIncomplete)) {
+  if (excludeIncomplete %in% 1:12) {
     xSubset <- exclude_incomplete_summers(xSubset,
                                           daily = dailyResolution,
-                                          australSplit = removeIncomplete)
-  } else if (removeIncomplete == "years") {
+                                          australSplit = excludeIncomplete)
+  } else if (isTRUE(excludeIncomplete)) {#} == "years") {
     xSubset <- exclude_incomplete_years(xSubset, daily = dailyResolution)
   }
 
