@@ -11,7 +11,8 @@ subset_by_date <- function(x,
   #'
   #'   The dates can be input either as a vector of specific dates using the
   #'   "dates" argument; or as a list of vectors containing the start and end
-  #'   dates for longer extended periods. See examples.
+  #'   dates for longer extended periods. All dates need to be entered in
+  #'   YYYY-MM-DD format (e.g. "2019-12-31").
   #'
   #' @param x SpatRaster: The data to subset. Can be either a string, in which
   #'   case it is interpreted as a filePath and read in, or an existing

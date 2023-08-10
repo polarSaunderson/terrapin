@@ -32,13 +32,8 @@ subset_by_month <- function(x, months,
   # Code -----------------------------------------------------------------------
   # Handle if months is "dec", "Dec", "December" or "december" instead of 12
   if (isFALSE(is.numeric(months[1]))) {
-    months <- gsub("([[:alpha:]])([[:alpha:]]+)", "\\U\\1\\L\\2",
-                   months, perl = TRUE) # equivalent to domR::make_sentence_case
-    months <- which(month.abb %in% substring(months, 1, 3))
+    months <- which(tolower(month.abb) %in% substring(tolower(months), 1, 3))
   }
-
-  # Read in the raster if necessary
-  # x <- read_terra(x)
 
   # Get dates of each layer
   xDates <- get_terra_dates(x, austral = NULL)
