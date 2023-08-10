@@ -1,7 +1,7 @@
 Package: terrapin
 Type: Package
 Title: Easily Manipulate Dates from the terra Package
-Version: 0.0.0.1
+Version: 0.0.0.2
 Authors@R: 
     person("Dominic" "Saunderson", "dominicsaunderson@gmail.com",
            role = c("aut", "cre"),
@@ -13,5 +13,6 @@ Description: The terrapin package is a personal package that slightly builds on
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
 Imports:
   terra

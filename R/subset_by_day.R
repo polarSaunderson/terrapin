@@ -17,7 +17,7 @@ subset_by_day <- function(x, days) {
 
   # Code -----------------------------------------------------------------------
   # Get dates of each layer
-  xDates <- get_terra_dates(x, austral = NULL)
+  xDates <- get_terra_dates(x, australSplit = NULL)
 
   # Identify relevant layers
   dayIndex <- which(xDates$day %in% days)

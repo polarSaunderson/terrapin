@@ -54,7 +54,7 @@ subset_by_date <- function(x,
   }
 
   # Get all dates of the input
-  xDates <- get_terra_dates(x, austral = NULL)
+  xDates <- get_terra_dates(x, australSplit = NULL)
 
   # Format the dates as necessary
   if (is.null(dates[1])) {

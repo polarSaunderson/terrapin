@@ -22,7 +22,7 @@ subset_by_summer <- function(x, summers,
 
   # Code -----------------------------------------------------------------------
   # Get dates of each layer
-  xDates <- get_terra_dates(x, austral = australSplit)
+  xDates <- get_terra_dates(x, australSplit = australSplit)
 
   # Identify relevant layers
   summerIndex <- which(xDates$summer %in% summers)

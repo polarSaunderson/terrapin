@@ -15,14 +15,14 @@ SpatRaster.}
 
 \item{australSplit}{numeric: Which is the last month included in an austral
 summer before the new austral year begins? The default value is 3, which
-means that all months *AFTER* March are considered as part of the
+means that all months \emph{AFTER} March are considered as part of the
 following summer (i.e. April 1991 -- March 1992 are all in 1992). Swap
 this value according: setting it as 4 means May 1991 -- April 1992 are
 all 1992.}
 }
 \description{
 Easily select only layers of a SpatRaster that are in a
-  certain austral summer (e.g. Summer 1991 is 1990/1991). See the
-  australSplit argument for defining which months are considered in which
-  austral summer.
+certain austral summer (e.g. Summer 1991 is 1990/1991). See the
+australSplit argument for defining which months are considered in which
+austral summer.
 }

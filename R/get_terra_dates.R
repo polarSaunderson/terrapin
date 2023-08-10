@@ -1,4 +1,4 @@
-get_terra_dates <- function(x, austral = 3) {
+get_terra_dates <- function(x, australSplit = 3) {
   #' Returns a data frame of the dates of a SpatRaster; useful for subsetting
   #'
   #' @description Often it is necessary to select only a subset of layers in a
@@ -8,7 +8,7 @@ get_terra_dates <- function(x, austral = 3) {
   #'   filtered. Only works with SpatRasters from the `terra` package.
   #'
   #' @param x SpatRaster: The dataset
-  #' @param austral numeric: If not NULL, create an additional column for the
+  #' @param australSplit numeric: If not NULL, create an additional column for the
   #'   austral summer. For example, December 1991 and January 1992 should often
   #'   be considered as part of summer 1991/1992 rather than in their respective
   #'   years. The default value is 3, which means that all months *AFTER* March
@@ -39,9 +39,9 @@ get_terra_dates <- function(x, austral = 3) {
   rasterDates <- data.frame(year, month, day, monthDay)
 
   # Austral
-  if (!is.null(austral)) {
+  if (!is.null(australSplit)) {
     summer <- year
-    summer[month > austral] <- summer[month > austral] + 1
+    summer[month > australSplit] <- summer[month > australSplit] + 1
     rasterDates$summer <- summer
   }
 

@@ -19,14 +19,15 @@ indicating when the period begins, and the second when the period ends.}
 }
 \description{
 Easily select only layers of a SpatRaster that are on specific
-  dates. This function is distinct to `subset_by_day()` as it considers the
-  full date, not just the day. It is usually quicker to chain together the
-  "subset_by_x" functions unless an unusual combination of dates are
-  required. See the examples.
+dates. This function is distinct to \code{subset_by_day()} as it considers the
+full date, not just the day. It is usually quicker to chain together the
+"subset_by_x" functions unless an unusual combination of dates are
+required. See the examples.
 
-  The dates can be input either as a vector of specific dates using the
-  "dates" argument; or as a list of vectors containing the start and end
-  dates for longer extended periods. See examples.
+The dates can be input either as a vector of specific dates using the
+"dates" argument; or as a list of vectors containing the start and end
+dates for longer extended periods. All dates need to be entered in
+YYYY-MM-DD format (e.g. "2019-12-31").
 }
 \examples{
 \dontrun{

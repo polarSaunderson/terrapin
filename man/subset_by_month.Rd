@@ -18,9 +18,9 @@ once (e.g. c(12, 1, 2)), but do not try to mix strings and numbers in the
 vector.}
 
 \item{removeIncomplete}{If the value is "years", the data is run through
-`remove_incomplete_years()`, and only months in years with all requested
+\code{remove_incomplete_years()}, and only months in years with all requested
 months in are returned. If the value is numeric (between 1 and 12), the
-data is fed into the `remove_incomplete_austral_summers()` and the value
+data is fed into the \code{remove_incomplete_austral_summers()} and the value
 is used as the "australSplit" argument to return only months in austral
 summers that contain all requested months. If any other value, all layers
 matching the months argument are returned, regardless of the summer or
@@ -28,10 +28,10 @@ year. See the examples.}
 
 \item{dailyResolution}{BINARY: If using the "removeIncomplete" argument, it
 is necessary to define whether the data is at a daily or monthly
-resolution. See the `remove_incomplete_austral_summers()` and
-`remove_incomplete_years()` functions for more information.}
+resolution. See the \code{remove_incomplete_austral_summers()} and
+\code{remove_incomplete_years()} functions for more information.}
 }
 \description{
 Easily select only layers of a SpatRaster that are in a
-  certain month/s (e.g. only layers that are in December).
+certain month/s (e.g. only layers that are in December).
 }

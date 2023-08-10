@@ -24,38 +24,38 @@ ignored when missing, and those years are still returned.}
 }
 \description{
 This function is perhaps easiest to explain with examples.
-  Here are three explanations in words, with the corresponding code
-  examples below. Be very careful and deliberate when using this function
-  because a lot of layers can be very easily excluded.
+Here are three explanations in words, with the corresponding code
+examples below. Be very careful and deliberate when using this function
+because a lot of layers can be very easily excluded.
 
-  *Example 1*: A dataset runs continuously from November 1980 to December
-  1983. There is no data for January--October 1980, so 1980 is an
-  incomplete year. If a monthly mean was then run, the November and
-  December values would each be calculated from 4 layers (1980, 1981, 1982,
-  1983), whereas the January--October values would each be calculated from
-  3 layers (1981, 1982, 1983). This function would remove the November and
-  December 1980 layers, leaving only layers from the complete years of
-  1981--1983, and thus the means for each month would all be calculated
-  from the same 3 years.
+\emph{Example 1}: A dataset runs continuously from November 1980 to December
+1983. There is no data for January--October 1980, so 1980 is an
+incomplete year. If a monthly mean was then run, the November and
+December values would each be calculated from 4 layers (1980, 1981, 1982,
+1983), whereas the January--October values would each be calculated from
+3 layers (1981, 1982, 1983). This function would remove the November and
+December 1980 layers, leaving only layers from the complete years of
+1981--1983, and thus the means for each month would all be calculated
+from the same 3 years.
 
-  *Example 2*: A dataset runs continuously from October 1980 to November
-  1983. There is no data for January--September 1980 or December 1983, so
-  1980 and 1983 are incomplete years. If a monthly mean was then run, the
-  October and November values would each be calculated from 4 layers (1980,
-  1981, 1982, 1983), the January--September would be calculated from 3
-  years (1981, 1982, 1983), and the December would be calculated from a
-  different three years (1980, 1981, 1982). This function would remove the
-  October--December 1980 layers, and the January--November 1983 layers,
-  leaving only the complete years of 1981 and 1982.
+\emph{Example 2}: A dataset runs continuously from October 1980 to November
+1983. There is no data for January--September 1980 or December 1983, so
+1980 and 1983 are incomplete years. If a monthly mean was then run, the
+October and November values would each be calculated from 4 layers (1980,
+1981, 1982, 1983), the January--September would be calculated from 3
+years (1981, 1982, 1983), and the December would be calculated from a
+different three years (1980, 1981, 1982). This function would remove the
+October--December 1980 layers, and the January--November 1983 layers,
+leaving only the complete years of 1981 and 1982.
 
-  *Example 3*: Be careful with the concept of a "complete year" in this
-  function - it is defined based on the layers in the SpatRaster, not on a
-  full calendar year. For example, imagine a dataset with layers for June
-  and July (1980-1983) and August (1980-1982). There is data for all three
-  months in 1980-1982, so these three years are considered complete.
-  However, there is no data for August 1983, so 1983 is considered an
-  incomplete year, and the June and July 1983 layers would therefore be
-  excluded.
+\emph{Example 3}: Be careful with the concept of a "complete year" in this
+function - it is defined based on the layers in the SpatRaster, not on a
+full calendar year. For example, imagine a dataset with layers for June
+and July (1980-1983) and August (1980-1982). There is data for all three
+months in 1980-1982, so these three years are considered complete.
+However, there is no data for August 1983, so 1983 is considered an
+incomplete year, and the June and July 1983 layers would therefore be
+excluded.
 }
 \seealso{
 subset_by_year()

@@ -15,7 +15,7 @@ SpatRaster.}
 }
 \description{
 Easily select only layers of a SpatRaster that are in a
-  certain year/s. For example, only want layers that are in 1991.
+certain year/s. For example, only want layers that are in 1991.
 }
 \examples{
 \dontrun{

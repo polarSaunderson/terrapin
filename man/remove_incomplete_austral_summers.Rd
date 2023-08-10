@@ -24,39 +24,39 @@ ignored when missing, and those summers are still returned.}
 
 \item{australSplit}{numeric: Which is the last month included in an austral
 summer before the new austral year begins? The default value is 3, which
-means that all months *AFTER* March are considered as part of the
+means that all months \emph{AFTER} March are considered as part of the
 following summer (i.e. April 1991 -- March 1992 are all in 1992). Swap
 this value according: setting it as 4 means May 1991 -- April 1992 are
 all 1992.}
 }
 \description{
 This function is perhaps easiest to explain with an example,
-  first written in words and with the corresponding code examples below.
-  This function works as `remove_incomplete_years()` but uses austral years
-  / summers as the defining period to match; see that function for further
-  examples, but keep this distinction in mind. Be very careful and
-  deliberate when using this function because a lot of layers can be very
-  easily excluded.
+first written in words and with the corresponding code examples below.
+This function works as \code{remove_incomplete_years()} but uses austral years
+/ summers as the defining period to match; see that function for further
+examples, but keep this distinction in mind. Be very careful and
+deliberate when using this function because a lot of layers can be very
+easily excluded.
 
-  *Example*: A dataset contains layers of December and January data in
-  1980--1983. However, the summer of 1979/1980 should have data layers for
-  December 1979 and January 1980, but the December 1979 data is not
-  available, so summer 1980 is incomplete. This function therefore excludes
-  the January 1980 data. Equally, the summer of 1984 should have the
-  December 1983 and January 1984 data, but the January 1984 data is not
-  available, so 1984 is an incomplete summer. This function therefore
-  excludes the December 1983 data. In the end, only the complete summers of
-  1981, 1982 and 1983 remain.
+\emph{Example}: A dataset contains layers of December and January data in
+1980--1983. However, the summer of 1979/1980 should have data layers for
+December 1979 and January 1980, but the December 1979 data is not
+available, so summer 1980 is incomplete. This function therefore excludes
+the January 1980 data. Equally, the summer of 1984 should have the
+December 1983 and January 1984 data, but the January 1984 data is not
+available, so 1984 is an incomplete summer. This function therefore
+excludes the December 1983 data. In the end, only the complete summers of
+1981, 1982 and 1983 remain.
 
 If we subset based on summers, we can sometimes get instances
-  when the date is not found in all summers. For example, if we have data
-  for December and January each year from 1980 to 1983, we are missing the
-  December data of summer 1980, and the January data of summer 1983. With
-  this function, we would therefore remove the January 1980 data and the
-  December 1983 data as those summers are incomplete. It would leave us
-  only with the December and January data in summers 1981, 1982 and 1983.
-  It ignores if the 29th February is missing and will still return those
-  summers.
+when the date is not found in all summers. For example, if we have data
+for December and January each year from 1980 to 1983, we are missing the
+December data of summer 1980, and the January data of summer 1983. With
+this function, we would therefore remove the January 1980 data and the
+December 1983 data as those summers are incomplete. It would leave us
+only with the December and January data in summers 1981, 1982 and 1983.
+It ignores if the 29th February is missing and will still return those
+summers.
 }
 \seealso{
 subset_by_summer()

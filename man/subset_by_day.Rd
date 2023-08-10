@@ -15,9 +15,9 @@ SpatRaster.}
 }
 \description{
 Easily select only layers of a SpatRaster that are on a
-  certain day/s. For example, only want layers that are on the 1st of a
-  month. This function is distinct to `subset_by_date()` as it subsets
-  using *only* the day part of the date: there is no accounting for the
-  month or year. This approach can be useful to select the first day of
-  each month for example.
+certain day/s. For example, only want layers that are on the 1st of a
+month. This function is distinct to \code{subset_by_date()} as it subsets
+using \emph{only} the day part of the date: there is no accounting for the
+month or year. This approach can be useful to select the first day of
+each month for example.
 }
