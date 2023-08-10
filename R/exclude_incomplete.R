@@ -35,7 +35,8 @@ exclude_incomplete_years <- function(x,
   #'   (e.g. it could refer to the midpoint or end of the month, which depend on
   #'   the length of the month). Set the `daily` argument as TRUE to use this
   #'   function with daily resolution data (i.e. when the day part of the date
-  #'   is important).
+  #'   is important). If daily resolution, 29th February is ignored if missing,
+  #'   and years/summers without it are still included.
   #'
   #'   ## Example 2
   #'   Taking the same initial dataset, and using
@@ -83,16 +84,23 @@ exclude_incomplete_years <- function(x,
   # Basic date information
   xDates     <- get_terra_dates(x, australSplit = NULL)
   xYears     <- xDates$year |> unique() |> sort()
-  xMonths    <- xDates$month |> unique() |> sort()
-  xMonthDays <- xDates$monthDay |> unique() |> sort()
   incYears   <- c()
 
-  # exclude Incomplete Years
+  # Exclude Incomplete Years
   # print("removing years")
   if (isTRUE(daily)) {
+    # All unique month-days in the data; ignore 29th February
+    xMonthDays <- xDates$monthDay |> unique() |> sort()
+    if ("02-29" %in% xMonthDays) {
+      xMonthDays <- xMonthDays[-which(xMonthDays == "02-29")]
+    }
     for (ii in xYears) {
       iiData      <- xDates[which(xDates$year == ii), ]
       iiMonthDays <- iiData$monthDay |> unique() |> sort()
+      # Ignore 29th February here too
+      if ("02-29" %in% iiMonthDays) {
+        iiMonthDays <- iiMonthDays[-which(iiMonthDays == "02-29")]
+      }
       if (length(iiMonthDays) == length(xMonthDays)) {
         if (sum(iiMonthDays != xMonthDays) == 0) {
           incYears <- c(incYears, ii)
@@ -101,6 +109,7 @@ exclude_incomplete_years <- function(x,
     }
     messageBit <- "month-day combination"
   } else if (isFALSE(daily)) {
+    xMonths    <- xDates$month |> unique() |> sort()
     for (ii in xYears) {
       iiData   <- xDates[which(xDates$year == ii), ]
       iiMonths <- iiData$month |> unique() |> sort()

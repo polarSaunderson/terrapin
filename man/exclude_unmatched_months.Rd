@@ -53,7 +53,8 @@ require a full date, but the day part is essentially an arbitrary number
 (e.g. it could refer to the midpoint or end of the month, which depend on
 the length of the month). Set the \code{daily} argument as TRUE to use this
 function with daily resolution data (i.e. when the day part of the date
-is important).
+is important). If daily resolution, 29th February is ignored if missing,
+and years/summers without it are still included.
 }
 
 \subsection{Example 2}{
