@@ -24,17 +24,19 @@ get_terra_dates <- function(x, austral = 3) {
   naDates <- is.na(dates)
 
   # Preallocate
-  year  <- rep(NA, length(dates))
-  month <- rep(NA, length(dates))
-  day   <- rep(NA, length(dates))
+  year     <- rep(NA, length(dates))
+  month    <- rep(NA, length(dates))
+  monthDay <- rep(NA, length(dates))
+  day      <- rep(NA, length(dates))
 
   # Format dates into a dataframe
   if (sum(!naDates) > 0) {
-    year[!naDates]  <- format(dates[!naDates], "%Y") |> as.numeric()
-    month[!naDates] <- format(dates[!naDates], "%m") |> as.numeric()
-    day[!naDates]   <- format(dates[!naDates], "%d") |> as.numeric()
+    year[!naDates]     <- format(dates[!naDates], "%Y") |> as.numeric()
+    month[!naDates]    <- format(dates[!naDates], "%m") |> as.numeric()
+    monthDay[!naDates] <- format(dates[!naDates], "%m-%d")
+    day[!naDates]      <- format(dates[!naDates], "%d") |> as.numeric()
   }
-  rasterDates <- data.frame(year, month, day)
+  rasterDates <- data.frame(year, month, day, monthDay)
 
   # Austral
   if (!is.null(austral)) {
