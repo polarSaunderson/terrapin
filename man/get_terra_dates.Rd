@@ -2,25 +2,26 @@
 % Please edit documentation in R/get_terra_dates.R
 \name{get_terra_dates}
 \alias{get_terra_dates}
-\title{Returns a data frame of the dates of a SpatRaster; useful for subsetting}
+\title{Return a data frame of layer dates for a SpatRaster; useful for subsetting}
 \usage{
 get_terra_dates(x, australSplit = 3)
 }
 \arguments{
-\item{x}{SpatRaster: The dataset}
+\item{x}{SpatRaster: The dataset.}
 
-\item{australSplit}{numeric: If not NULL, create an additional column for the
-austral summer. For example, December 1991 and January 1992 should often
-be considered as part of summer 1991/1992 rather than in their respective
-years. The default value is 3, which means that all months \emph{AFTER} March
-are considered as part of the following summer (i.e. April 1991 -- March
-1992 are all in 1992). Swap this value according: setting it as 4 means
-May 1991 -- April 1992 are all 1992.}
+\item{australSplit}{numeric: If not FALSE, create an additional column for
+the austral summer. For example, December 1991 and January 1992 often
+need to be considered as part of summer 1991/1992 rather than in their
+respective years. The default value is 3, which means that all months
+\emph{AFTER} March (month 3) are considered as part of the following summer
+(i.e. April 1991 -- March 1992 are all in summer 1992). Swap this value
+according: setting it as 4 means May 1991 -- April 1992 are all summer
+1992.}
 }
 \description{
 Often it is necessary to select only a subset of layers in a
 dataset based on their date. For example, only layers in December, or in
-2017. This function creates a dataframe with the necessary date
+2017. This function creates a data frame with the necessary date
 information, which allows the correct layers to be identified and
 filtered. Only works with SpatRasters from the \code{terra} package.
 }

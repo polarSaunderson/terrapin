@@ -13,13 +13,12 @@ exclude_incomplete_summers(x, daily, australSplit = 3, printClarity = FALSE)
 when considering which dates are present each year; if FALSE, only the
 month is considered.}
 
-\item{australSplit}{numeric: If not NULL, create an additional column for the
-austral summer. For example, December 1991 and January 1992 should often
-be considered as part of summer 1991/1992 rather than in their respective
-years. The default value is 3, which means that all months \emph{AFTER} March
-are considered as part of the following summer (i.e. April 1991 -- March
-1992 are all in 1992). Swap this value according: setting it as 4 means
-May 1991 -- April 1992 are all 1992.}
+\item{australSplit}{numeric: Which is the last month included in an austral
+summer before the new austral year begins? The default value is 3, which
+means that all months \emph{AFTER} March are considered as part of the
+following summer (i.e. April 1991 -- March 1992 are all in 1992). Swap
+this value according: setting it as 4 means May 1991 -- April 1992 are
+all 1992.}
 
 \item{printClarity}{LOGICAL: If TRUE, print out an explanation when the
 function runs to clarify which data is being excluded and which included.}

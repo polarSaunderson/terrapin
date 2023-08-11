@@ -2,20 +2,19 @@
 % Please edit documentation in R/exclude_unmatched.R
 \name{exclude_unmatched_months}
 \alias{exclude_unmatched_months}
-\title{Subset a SpatRaster to exclude layers when the month isn't found in all years}
+\title{Subset a SpatRaster to exclude months not found each year / summer}
 \usage{
-exclude_unmatched_months(x, australSplit = NULL, printClarity = FALSE)
+exclude_unmatched_months(x, australSplit = FALSE, printClarity = FALSE)
 }
 \arguments{
 \item{x}{The SpatRaster data to subset.}
 
-\item{australSplit}{numeric: If not NULL, create an additional column for the
-austral summer. For example, December 1991 and January 1992 should often
-be considered as part of summer 1991/1992 rather than in their respective
-years. The default value is 3, which means that all months \emph{AFTER} March
-are considered as part of the following summer (i.e. April 1991 -- March
-1992 are all in 1992). Swap this value according: setting it as 4 means
-May 1991 -- April 1992 are all 1992.}
+\item{australSplit}{numeric: Which is the last month included in an austral
+summer before the new austral year begins? The default value is 3, which
+means that all months \emph{AFTER} March are considered as part of the
+following summer (i.e. April 1991 -- March 1992 are all in 1992). Swap
+this value according: setting it as 4 means May 1991 -- April 1992 are
+all 1992.}
 
 \item{printClarity}{LOGICAL: If TRUE, print out an explanation when the
 function runs to clarify which data is being excluded and which included.}

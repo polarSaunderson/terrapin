@@ -176,10 +176,18 @@ exclude_incomplete_summers <- function(x,
   # exclude Incomplete Summers
   # print("removing summers")
   if (isTRUE(daily)) {
+    # All unique month-days in the data; ignore 29th February
     xMonthDays <- xDates$monthDay |> unique() |> sort()
+    if ("02-29" %in% xMonthDays) {
+      xMonthDays <- xMonthDays[-which(xMonthDays == "02-29")]
+    }
     for (ii in xSummers) {
       iiData      <- xDates[which(xDates$summer == ii), ]
       iiMonthDays <- iiData$monthDay |> unique() |> sort()
+      # Ignore 29th February here too
+      if ("02-29" %in% iiMonthDays) {
+        iiMonthDays <- iiMonthDays[-which(iiMonthDays == "02-29")]
+      }
       # print(iiData)
       if (length(iiMonthDays) == length(xMonthDays)) {
         if (sum(iiMonthDays != xMonthDays) == 0) {

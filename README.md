@@ -10,6 +10,13 @@ The public version of this repo can be accessed at:
   https://github.com/polarSaunderson/terrapin
 
 ## To-Do
+### 2023-08-10
+- [ ] Should any of the racmoR functions be in terrapin?
+  - [ ] exclude functions
+  - [ ] multiMonth
+  - [ ] calc_in_space
+  - [ ] others?
+  
 ### 2023-08-03
 - [ ] Think about correlate and regress by cell functions
  - [ ] Which functions do these need, and where should they be? e.g. `apply_lm()`

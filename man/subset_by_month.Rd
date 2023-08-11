@@ -18,7 +18,7 @@ once (e.g. c(12, 1, 2)), but do not try to mix strings and numbers in the
 vector.}
 
 \item{excludeIncomplete}{Be careful using this argument, it can
-dramatically affect the output of this function. If the value is "years",
+dramatically affect the output of this function. If the value is TRUE,
 the data is run through \code{exclude_incomplete_years()}, and only months in
 years with all requested months in are returned. If the value is numeric
 (between 1 and 12), the data is fed into the
