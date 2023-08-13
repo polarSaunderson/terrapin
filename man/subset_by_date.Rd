@@ -38,15 +38,15 @@ YYYY-MM-DD format (e.g. "2019-12-31").
                                           "2003-04-17", "2012-09-22"))
 
   # For extended periods, use the "dateList" argument:
-  xSubset2 <- subset_by_date(x,
-                             dateList = list(c("1991-12-01", "1991-12-05"),
-                                             c("1993-11-15", "1993-12-15")))
+  xSubset2 <- subset_by_date(x, dateList = list(c("1991-12-01", "1991-12-05"),
+                                                c("1993-11-15", "1993-12-15")))
 
   # However, it can be easier to chain other "subset_by_x" functions:
-  xSubset3 <- subset_by_year(x, 1991) |> subset_by_month(12)
+  xSubset3 <- subset_by_year(x, 1991) |>
+              subset_by_month(12)
 
   # instead of using subset_by_date:
-  xSubset4 <- subset_by_date(x,
-                             dateList = list(c("1991-12-01", "1991-12-31")
+  xSubset4 <- subset_by_date(x, dateList = list(c("1991-12-01", "1991-12-31")
 }
+
 }

@@ -31,17 +31,17 @@ subset_by_date <- function(x,
   #'                                           "2003-04-17", "2012-09-22"))
   #'
   #'   # For extended periods, use the "dateList" argument:
-  #'   xSubset2 <- subset_by_date(x,
-  #'                              dateList = list(c("1991-12-01", "1991-12-05"),
-  #'                                              c("1993-11-15", "1993-12-15")))
+  #'   xSubset2 <- subset_by_date(x, dateList = list(c("1991-12-01", "1991-12-05"),
+  #'                                                 c("1993-11-15", "1993-12-15")))
   #'
   #'   # However, it can be easier to chain other "subset_by_x" functions:
-  #'   xSubset3 <- subset_by_year(x, 1991) |> subset_by_month(12)
+  #'   xSubset3 <- subset_by_year(x, 1991) |>
+  #'               subset_by_month(12)
   #'
   #'   # instead of using subset_by_date:
-  #'   xSubset4 <- subset_by_date(x,
-  #'                              dateList = list(c("1991-12-01", "1991-12-31")
+  #'   xSubset4 <- subset_by_date(x, dateList = list(c("1991-12-01", "1991-12-31")
   #' }
+  #'
   #' @export
 
   # Code -----------------------------------------------------------------------
@@ -53,24 +53,27 @@ subset_by_date <- function(x,
     stop("Please use either the dates or dateList argument, not both.")
   }
 
-  # Get all dates of the input
-  xDates <- get_terra_dates(x, australSplit = NULL)
-
-  # Format the dates as necessary
-  if (is.null(dates[1])) {
+  # Format the dates as necessary - account for using dates or dateList argument
+  # if (is.null(dates[1])) {
+  if (!is.null(dateList)) {
     # If using the dateList argument
     dates <- c() # preallocate
 
     # extend date periods and add
     for (ii in seq_along(dateList)) {
-      dates <- as.Date(dateList[[ii]][1]):as.Date(dateList[[ii]][2])
-      inDates <- c(dates, iiDates)
+      iiDates <- as.Date(dateList[[ii]][1]):as.Date(dateList[[ii]][2])
+      dates   <- c(dates, iiDates)
     }
     dates <- as.Date(dates, "1970-01-01") # format as dates
   }
 
-  # Identify which layers need subsetting
+  # Get all dates of the input
+  xDates <- get_terra_dates(x, australSplit = NULL)
+
+  # Preallocate to later subset with
   dateIndex <- rep(NA, length(dates))
+
+  # Identify which layers need subsetting
   for (ii in seq_along(dates)) {
     # Prep the ii data
     iiDate <- dates[[ii]]
@@ -82,7 +85,7 @@ subset_by_date <- function(x,
     dateIndex[ii] <- xDates[xDates$year == iiYear &
                               xDates$month == iiMonth &
                               xDates$day == iiDay, ] |>
-      rownames() |>
+      rownames() |>  # these should be numbers
       as.numeric()
   }
 

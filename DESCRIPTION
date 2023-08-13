@@ -3,8 +3,9 @@ Type: Package
 Title: Easily Manipulate Dates from the terra Package
 Version: 0.0.0.2
 Authors@R: 
-    person("Dominic" "Saunderson", "dominicsaunderson@gmail.com",
+    person("Dominic", "Saunderson",
            role = c("aut", "cre"),
+           email = "dominicsaunderson@gmail.com",
            comment = c(ORCID = "0000-0001-7440-0101"))
 Description: The terrapin package is a personal package that slightly builds on 
     the [terra](https://rspatial.org) package. It is mainly composed of 
