@@ -1,7 +1,7 @@
 Package: terrapin
 Type: Package
 Title: Easily Manipulate Dates from the terra Package
-Version: 0.0.0.3
+Version: 0.0.1.0
 Authors@R: 
     person("Dominic", "Saunderson",
            role = c("aut", "cre"),
