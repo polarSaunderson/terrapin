@@ -10,13 +10,14 @@ get_terra_dates(x, australSplit = 3)
 \item{x}{SpatRaster: The dataset.}
 
 \item{australSplit}{numeric: If not FALSE, create an additional column for
-the austral summer. For example, December 1991 and January 1992 often
-need to be considered as part of summer 1991/1992 rather than in their
-respective years. The default value is 3, which means that all months
-\emph{AFTER} March (month 3) are considered as part of the following summer
-(i.e. April 1991 -- March 1992 are all in summer 1992). Swap this value
-according: setting it as 4 means May 1991 -- April 1992 are all summer
-1992.}
+the austral summer / year. For example, December 1991 and January 1992
+often need to be considered as part of summer 1991/1992 in the southern
+hemisphere rather than in their respective years. The default value is 3,
+which means that all months \emph{AFTER} March (i.e. month 3) are considered
+as part of the following austral summer / year (i.e. April 1991 -- March
+1992 are all in austral summer / year 1992). Swap this value accordingly:
+e.g. setting it as 4 means May 1991 -- April 1992 are all austral summer
+/ year 1992.}
 }
 \description{
 Often it is necessary to select only a subset of layers in a
