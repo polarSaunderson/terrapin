@@ -17,58 +17,201 @@ month is considered.}
 function runs to clarify which data is being excluded and which included.}
 }
 \description{
-The 4 \code{exclude_x} functions are easiest to explain with
-examples. Be very careful and deliberate with these functions to know
-exactly what is being excluded.
+The \code{exclude_x} functions are easiest to explain with
+theoretical examples. See "Explaining the Exclude Functions" below.
 
-Take a dataset containing monthly data for Jan-Apr in 1980 and 1981,
-Jan--Mar in 1982, and Jan--Feb in 1983. If mean values were calculated on
-a monthly basis, the January and February values would be calculated from
-4 layers each (i.e. 1980, 1981, 1982, and 1983), but the March value
-would be from 3 layers (1980, 1981, 1982), and the April data from just
-two layers (1980, 1981). The \code{exclude_x} functions can help in a few ways
-to wrangle the data before running the means.
-\subsection{Example 1}{
+\strong{!!! WARNING !!!} Be very careful and deliberate with these functions
+to know exactly what is being excluded.
+}
+\section{Explaining the Exclude Functions}{
+\subsection{Premise}{
 
-Using \code{exclude_incomplete_years}, the 1982 and 1983 data is
-excluded. These two years do not contain all of the months found in the
-data (i.e. Jan, Feb, Mar, Apr): neither 1982 or 1983 have April data, and
-1983 does not have March data either. Only data layers in years in which
-all of the months in the dataset (i.e. Jan--April) occur are retained:
-here, that would be 1980 and 1981, which both have data for Jan--Apr.
+To explain these functions, take a dataset xData. xData is a SpatRaster
+with 13 layers of data (shown here as a grid to highlight demonstrate
+what happens).
 
-The term "incomplete_years" is therefore relative; it is defined by the
-data fed in. A year in this function is defined with calendar dates (i.e.
-January through December); for the equivalent with austral years /
-summers, use \code{exclude_incomplete_summers}.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Theoretical Dataset xData
+    (each Mon YYYY is a layer in the SpatRaster)
 
-This example is based on a monthly resolution (i.e. January, not e.g.
-January 16th). A monthly resolution in this function is particularly
-useful for monthly resolution data - all data layers in terra still
-require a full date, but the day part is essentially an arbitrary number
-(e.g. it could refer to the midpoint or end of the month, which depend on
-the length of the month). Set the \code{daily} argument as TRUE to use this
-function with daily resolution data (i.e. when the day part of the date
-is important). If daily resolution, 29th February is ignored if missing,
-and years/summers without it are still included.
+                     Jan       Feb       Mar       Apr
+    year 1980:     Jan 1980, Feb 1980, Mar 1980, Apr 1980
+    year 1981:     Jan 1981, Feb 1981, Mar 1981, Apr 1981
+    year 1982:     Jan 1982, Feb 1982, Mar 1982
+    year 1983:     Jan 1983, Feb 1983
+}\if{html}{\out{</div>}}
+
+Imagine the following questions:
+- A) Is the mean January value greater than the mean Feb value?\n
+- B) Is the mean January value greater than the mean Apr value?\n
+- C) Is the mean 1980 value greater than the mean 1981 value?\n
+- D) Is the mean 1980 value greater than the mean 1983 value?\n
+
+Questions A is easy; there are 4 January datasets and 4 February datasets
+in the same years.
+
+Question B is less clear. Does it make sense to compare the mean of the
+Jan data in 4 years with the mean of the Apr data in 2 years?
+
+Question C is easy; the same 4 months in 1980 and in 1981 have data.
+
+Question D is again less clear. Does it make sense to compare the mean
+of 4 months in 1980 with the mean of 2 months in 1983?
+
+The \code{exclude_x} functions can help wrangle the data to answer these
+questions. However, these functions are very happy to exclude data, so be
+\strong{extremely careful} using them and understand exactly what is being
+excluded and whether that makes sense.
 }
 
-\subsection{Example 2}{
+\subsection{Example 1: \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}} for Question B}{
 
-Taking the same initial dataset, and using
-\code{exclude_unmatched_months}, the March and April data is excluded. These
-two months do not have data in all of the years found in the data (i.e.
-1980, 1981, 1982, 1983): April data doesn't exist in either 1982 or 1983,
-and March data doesn't exist in 1982. Only data layers in months found in
-all years of the dataset (i.e. 1980:1983) are retained: here, that would
-be January and February, both of which have data in 1980:1983.
+\strong{Result}: Using \code{exclude_incomplete_years}, the 1982 and 1983 data is
+excluded.
 
-For the equivalent function, but using both the day and month part of the
-date, use \code{exclude_unmatched_days}. Both of the \code{exclude_unmatched}
-functions can be run for a calendar year ('australSplit = NULL') or for
-an austral year / summer.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Theoretical Dataset xData
+    *AFTER* exclude_unmatched_months()
+
+                     Jan       Feb       Mar       Apr
+    year 1980:     Jan 1980, Feb 1980, Mar 1980, Apr 1980
+    year 1981:     Jan 1981, Feb 1981, Mar 1981, Apr 1981
+}\if{html}{\out{</div>}}
+
+\emph{note} With this function, we remove the incomplete rows in the gridded
+representation of the xData.
+
+\strong{Why?} Our dataset has Jan, Feb, Mar and Apr data. However, there is only
+data for all 4 of these months in 1980 and 1981; neither 1982 or 1983
+have Apr data, and there is no Mar data in 1983 either. Therefore, the
+1982 and 1983 years are "incomplete years", and excluded. The term
+"incomplete years" is thus relative, being defined in relation to dataset
+fed in.
+
+For Question B, we can now just calculate the mean of all January values
+(1980, 1981) and of all Apr values (1980, 1981) in the dataset, and
+compare the values.
+}
+
+\subsection{Example 2: \code{\link[=exclude_unmatched_months]{exclude_unmatched_months()}} for Question D}{
+
+\strong{Result}: Using \code{exclude_unmatched_months}, the Mar and Apr data is
+excluded.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Theoretical Dataset xData
+    *AFTER* xData after exclude_unmatched_months()
+                     Jan       Feb
+    year 1980:     Jan 1980, Feb 1980
+    year 1981:     Jan 1981, Feb 1981
+    year 1982:     Jan 1982, Feb 1982
+    year 1983:     Jan 1983, Feb 1983
+}\if{html}{\out{</div>}}
+
+\emph{note} With this function, we remove the incomplete columns in the
+gridded representation of the xData.
+
+\strong{Why?} The xData dataset has data in 4 months (Jan, Feb, Mar, Apr).
+However, there is no Mar and Apr data available in each of the years
+found in the dataset - there is no Apr data for 1982 or 1983, and no Mar
+data in 1982 either. Therefore, we consider that the Mar and Apr data is
+"unmatched" in all years of the dataset, and exclude these months.
+
+For Question D, we can now mean all of the data in 1980 (Jan, Feb) and
+mean all of the data in 1981 (Jan, Feb), and compare the values.
+}
+
+\subsection{Resolution}{
+
+The above examples are based on using monthly resolution data (i.e. Jan,
+not Jan 1st, Jan 2nd, Jan 3rd...). For the \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}}
+function, it is therefore necessary to set the 'daily' argument as FALSE.
+This is necessary because all SpatRaster layers must have a complete date
+(i.e. YYYY-MM-DD), but for monthly data, the "DD" is essentially a
+random number (e.g. the first day in the month, the midpoint, the end).
+The DD part of the date should therefore be ignored.
+
+However, for daily data, the "DD" part is vital, and 'daily' should be
+set as TRUE.
+
+When using \code{\link[=exclude_unmatched_months]{exclude_unmatched_months()}}, the monthly resolution is built
+into the function name. The equivalent for daily data requires the
+\code{\link[=exclude_unmatched_days]{exclude_unmatched_days()}} function.
+}
+
+\subsection{Years vs Austral Summers / Years}{
+
+The above examples were based on the gridded representation of xData
+using years as the rows. Often in the southern hemisphere it makes more
+sense to think of austral years, particularly in the summer where (e.g.)
+Dec 1991 and Jan 1992 should be considered together as part of summer
+1992.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Theoretical Dataset sData
+    (each Mon YYYY is a layer in the SpatRaster)
+                       Nov       Dec       Jan       Feb
+    summer 1980:     Nov 1979, Dec 1979, Jan 1980, Feb 1980
+    summer 1981:     Nov 1980, Dec 1980, Jan 1981, Feb 1981
+    summer 1982:     Nov 1981, Dec 1981, Jan 1982, Feb 1982
+    summer 1983:     Nov 1982, Dec 1982, Jan 1983
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Example 3: \link{exclude_unmatched_months(australSplit = 3)}}{
+
+\strong{Result}: Using \code{exclude_unmatched_months(australSplit = 3)}, the Feb
+data is excluded.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Theoretical Dataset sData
+    *AFTER* exclude_unmatched_months(australSplit = 3)
+                       Nov       Dec       Jan
+    summer 1980:     Nov 1979, Dec 1979, Jan 1980
+    summer 1981:     Nov 1980, Dec 1980, Jan 1981
+    summer 1982:     Nov 1981, Dec 1981, Jan 1982
+    summer 1983:     Nov 1982, Dec 1982, Jan 1983
+}\if{html}{\out{</div>}}
+
+\emph{note} With this function, we remove the incomplete columns in the
+gridded representation of the sData (when rows are summers).
+
+\emph{BEWARE} If 'australSplit' had been set as FALSE (so the gridded
+representation uses years as rows), all data would have been excluded:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  - Nov and Dec are not found in 1983;
+  - Jan is not found in 1979;
+  - Feb is not found in 1979 or 1983.
+}\if{html}{\out{</div>}}
+
+Therefore all months would have been unmatched:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Theoretical Dataset sData
+    *AFTER* sData after exclude_unmatched_months()
+
+    !!! EMPTY !!!
+}\if{html}{\out{</div>}}
+
+This example also highlights how aggressively these functions want to
+exclude data!
+
+The 'australSplit' argument is also available within
+\code{\link[=exclude_unmatched_days]{exclude_unmatched_days()}}.
+}
+
+\subsection{Example 4 \code{\link[=exclude_incomplete_summers]{exclude_incomplete_summers()}}}{
+
+\strong{Result}: Using \code{exclude_incomplete_summer()}, the 1983 data is
+excluded.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Theoretical Dataset xData
+    *AFTER* sData after exclude_incomplete_summers()
+                       Nov       Dec       Jan       Feb
+    summer 1980:     Nov 1979, Dec 1979, Jan 1980, Feb 1980
+    summer 1981:     Nov 1980, Dec 1980, Jan 1981, Feb 1981
+    summer 1982:     Nov 1981, Dec 1981, Jan 1982, Feb 1982
+}\if{html}{\out{</div>}}
+
+\emph{note} With this function, we remove the incomplete rows in the
+gridded representation of the sData (when rows are summers).
 }
 }
+
 \examples{
   \dontrun{
     x <- terra::rast("xData.nc")

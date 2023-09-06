@@ -3,7 +3,7 @@ exclude_unmatched_months <- function(x,
                                      printClarity = FALSE) {
   #' Subset a SpatRaster to exclude months not found each year / summer
   #'
-  #' @inherit exclude_incomplete_years description
+  #' @inherit exclude_incomplete_years
   #' @inheritParams exclude_incomplete_summers
   #'
   #' @export
@@ -83,8 +83,8 @@ exclude_unmatched_days <- function(x,
                                    printClarity = FALSE) {
   #' Subset a SpatRaster to exclude dates not found each year / summer
   #'
-  #' @inherit exclude_incomplete_years description
-  #' @inheritParams exclude_unmatched_months
+  #' @inherit exclude_incomplete_years
+  #' @inheritParams exclude_incomplete_summers
   #'
   #' @export
 
