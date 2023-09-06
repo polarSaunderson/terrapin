@@ -19,7 +19,7 @@ correspond to a valid month.}
 \description{
 Often it is necessary to swap between representations of
 months but this is just pointless fiddly code. This function simply (via
-the help of a horrific nested ifelse :)!) handles common inputs, and
+the help of a horrific nested \code{ifelse}!) handles common inputs, and
 returns them in a specified format.
 
 Input and output can be in the following formats:
@@ -31,5 +31,10 @@ Input and output can be in the following formats:
   "jan"      lower case abbreviation
   "January"  Capitalised Name
   "january"  lower case name
+  "J"        Capital initial - only as output
+  "j"        lower case initial - only as output
 }\if{html}{\out{</div>}}
+
+To re-emphasize, the initials cannot be used as input because they are
+ambiguous. However, they can be returned if you really want to use them.
 }

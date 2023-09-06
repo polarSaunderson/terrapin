@@ -11,11 +11,21 @@ subset_by_date(x, dates = NULL, dateList = NULL)
 case it is interpreted as a filePath and read in, or an existing
 SpatRaster.}
 
-\item{dates}{A vector of specific dates to return. Must be in the format
-YYYY-MM-DD.}
+\item{dates}{Used for specific dates. Input must be a vector of specific
+dates to return, each in the format "YYYY-MM-DD".
 
-\item{dateList}{A list of vectors, with the first value in each vector
-indicating when the period begins, and the second when the period ends.}
+For example, c("2019-01-01", "2019-01-03", "2011-03-08") will return 3
+layers (3 is assuming those dates are available in the dataset and each
+date only appears once; if not, all instances of a date will be returned;
+if no dates match, an empty SpatRaster is returned).}
+
+\item{dateList}{Used for extended periods of dates. Input must be a
+list of vectors, with the first value in each vector indicating when the
+period begins, and the second when the period ends.
+
+For example, \verb{list(c("2019-01-01", "2019-01-03"), c("2011-03-08", "2011-03-11")}
+will return the layers for 1st, 2nd and 3rd of January 2019, and the 8th,
+9th, 10th and 11th of March 2011.}
 }
 \description{
 Easily select only layers of a SpatRaster that are on specific

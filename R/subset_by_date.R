@@ -17,10 +17,20 @@ subset_by_date <- function(x,
   #' @param x SpatRaster: The data to subset. Can be either a string, in which
   #'   case it is interpreted as a filePath and read in, or an existing
   #'   SpatRaster.
-  #' @param dates A vector of specific dates to return. Must be in the format
-  #'   YYYY-MM-DD.
-  #' @param dateList A list of vectors, with the first value in each vector
-  #'   indicating when the period begins, and the second when the period ends.
+  #' @param dates Used for specific dates. Input must be a vector of specific
+  #'   dates to return, each in the format "YYYY-MM-DD".
+  #'
+  #'   For example, c("2019-01-01", "2019-01-03", "2011-03-08") will return 3
+  #'   layers (3 is assuming those dates are available in the dataset and each
+  #'   date only appears once; if not, all instances of a date will be returned;
+  #'   if no dates match, an empty SpatRaster is returned).
+  #' @param dateList Used for extended periods of dates. Input must be a
+  #'   list of vectors, with the first value in each vector indicating when the
+  #'   period begins, and the second when the period ends.
+  #'
+  #'   For example, `list(c("2019-01-01", "2019-01-03"), c("2011-03-08", "2011-03-11")`
+  #'   will return the layers for 1st, 2nd and 3rd of January 2019, and the 8th,
+  #'   9th, 10th and 11th of March 2011.
   #'
   #' @examples
   #' \dontrun{
@@ -47,14 +57,18 @@ subset_by_date <- function(x,
   # Code -----------------------------------------------------------------------
   # Check that dates have been requested!
   if (is.null(dates[1]) & is.null(dateList[1])) {
-    stop("Please select some dates!")
+    stop("No dates selected!")
   }
   if (!is.null(dates[1]) & !is.null(dateList[1])) {
     stop("Please use either the dates or dateList argument, not both.")
   }
 
+  # Handle if x is a filename
+  if ("SpatRaster" %notIn% is(x)) {
+    x <- terra::rast(x)
+  }
+
   # Format the dates as necessary - account for using dates or dateList argument
-  # if (is.null(dates[1])) {
   if (!is.null(dateList)) {
     # If using the dateList argument
     dates <- c() # preallocate
@@ -70,27 +84,37 @@ subset_by_date <- function(x,
   # Get all dates of the input
   xDates <- get_terra_dates(x, australSplit = NULL)
 
-  # Preallocate to later subset with
-  dateIndex <- rep(NA, length(dates))
+  # Which rows of the xDates date match our requested dates?
+  dateIndex <- which(xDates$date %in% dates)
 
-  # Identify which layers need subsetting
-  for (ii in seq_along(dates)) {
-    # Prep the ii data
-    iiDate <- dates[[ii]]
-    iiYear  <- format(as.Date(iiDate), "%Y") |> as.numeric()
-    iiMonth <- format(as.Date(iiDate), "%m") |> as.numeric()
-    iiDay   <- format(as.Date(iiDate), "%d") |> as.numeric()
-
-    # Retrieve & store the rownumber of the correct date layer
-    dateIndex[ii] <- xDates[xDates$year == iiYear &
-                              xDates$month == iiMonth &
-                              xDates$day == iiDay, ] |>
-      rownames() |>  # these should be numbers
-      as.numeric()
-  }
-
-  # Subset the data
-  xSubset <- terra::subset(x, dateIndex)
+  # Subset
+  xSubset <- terra::subset(x, mdIndex)
 
   return(xSubset)
 }
+
+#
+#   # Preallocate to later subset with
+#   dateIndex <- rep(NA, length(dates))
+#
+#   # Identify which layers need subsetting
+#   for (ii in seq_along(dates)) {
+#     # Prep the ii data
+#     iiDate  <- dates[[ii]]
+#     iiYear  <- format(as.Date(iiDate), "%Y") |> as.numeric()
+#     iiMonth <- format(as.Date(iiDate), "%m") |> as.numeric()
+#     iiDay   <- format(as.Date(iiDate), "%d") |> as.numeric()
+#
+#     # Retrieve & store the rownumber of the correct date layer
+#     dateIndex[ii] <- xDates[xDates$year == iiYear &
+#                               xDates$month == iiMonth &
+#                               xDates$day == iiDay, ] |>
+#       rownames() |>  # these should be numbers
+#       as.numeric()
+#   }
+#
+#   # Subset the data
+#   xSubset <- terra::subset(x, dateIndex)
+#
+#   return(xSubset)
+# }

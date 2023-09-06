@@ -14,25 +14,30 @@ SpatRaster.}
 \item{months}{vector: Which month/s to return? Input as either the month
 number (12), the full month name ("December" or "december"), or the
 abbreviated month name ("Dec" or "dec"). Multiple months can be input at
-once (e.g. c(12, 1, 2)), but do not try to mix strings and numbers in the
-vector.}
+once as vector (e.g. c(12, 1, 2)), but \strong{do not} try to mix strings and
+numbers in the vector.}
 
-\item{excludeIncomplete}{Be careful using this argument, it can
-dramatically affect the output of this function. If the value is TRUE,
-the data is run through \code{exclude_incomplete_years()}, and only months in
-years with all requested months in are returned. If the value is numeric
-(between 1 and 12), the data is fed into the
+\item{excludeIncomplete}{Be careful using this argument! It can
+dramatically affect the output of this function. Please read the
+Explanation in \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}} first.
+
+If TRUE, the data is run through \code{exclude_incomplete_years()}, and only
+months in years with all requested months in are returned.
+
+If numeric (between 1 and 12), the data is fed into
 \code{exclude_incomplete_summers()} and the value is used as the
 'australSplit' argument to return only months in austral summers that
-contain all requested months. If any other value (including the default
-FALSE), these functions are skipped, and all layers matching the months
-argument are returned, regardless of the summers or years. See the
-examples.}
+contain all requested months.
+
+If any other value (including the default FALSE), the
+\code{exclude_incomplete_x} functions are skipped, and all layers matching the
+'months' argument are returned, regardless of the summer or year in which
+they occur. See the examples.}
 
 \item{dailyResolution}{BINARY: If using the 'excludeIncomplete' argument,
 it is necessary to define whether the data is at a daily or monthly
-resolution. See the \code{exclude_incomplete_summers()} and
-\code{exclude_incomplete_years()} functions for more information.}
+resolution. See \code{\link[=exclude_incomplete_summers]{exclude_incomplete_summers()}} and
+\code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}} for more information.}
 }
 \description{
 Easily select only layers of a SpatRaster that are in a

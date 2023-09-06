@@ -11,11 +11,18 @@ subset_by_day <- function(x, days) {
   #' @param x SpatRaster: The data to subset. Can be either a string, in which
   #'   case it is interpreted as a filePath and read in, or an existing
   #'   SpatRaster.
-  #' @param days vector: Which day/s to return?
+  #' @param days vector: Which day/s to return? For example, `1:3` will return
+  #'   all layers that have "01", "02" or "03" as "DD" in "YYYY-MM-DD",
+  #'   regardless of the year or month.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
+  # Handle if x is a filename
+  if ("SpatRaster" %notIn% is(x)) {
+    x <- terra::rast(x)
+  }
+
   # Get dates of each layer
   xDates <- get_terra_dates(x, australSplit = NULL)
 

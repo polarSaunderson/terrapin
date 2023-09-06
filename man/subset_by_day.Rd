@@ -11,7 +11,9 @@ subset_by_day(x, days)
 case it is interpreted as a filePath and read in, or an existing
 SpatRaster.}
 
-\item{days}{vector: Which day/s to return?}
+\item{days}{vector: Which day/s to return? For example, \code{1:3} will return
+all layers that have "01", "02" or "03" as "DD" in "YYYY-MM-DD",
+regardless of the year or month.}
 }
 \description{
 Easily select only layers of a SpatRaster that are on a

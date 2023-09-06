@@ -21,6 +21,11 @@ subset_by_summer <- function(x, summers,
   #' @export
 
   # Code -----------------------------------------------------------------------
+  # Handle if x is a filename
+  if ("SpatRaster" %notIn% is(x)) {
+    x <- terra::rast(x)
+  }
+
   # Get dates of each layer
   xDates <- get_terra_dates(x, australSplit = australSplit)
 
