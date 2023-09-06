@@ -90,3 +90,21 @@ handle_months <- function(x, out = "01") {
 
   return(z)
 }
+
+#
+#
+# # THIS IS IN PROGRESS - I DON'T KNOW HOW TO IGNORE THIS BIT IF NOT A JJA
+#
+#
+# # Account for if a vector of initials is entered (e.g. JJA)
+# mString <- substring(month.abb, 1, 1) |> paste(collapse = "") |> strrep(2)
+#
+# # Define here for use in the lapply
+# mini_matching_fun <- function(pattern, text) {
+#   greg <- gregexpr(pattern, text)
+#   index <- 0:(length(pattern) + 1) + unlist(greg)
+#   index[index > 12] <- index[index > 12] - 12
+#   return(index)
+# }
+# tt <- lapply(xxx, FUN = mini_matching_fun, text = mString)
+#
