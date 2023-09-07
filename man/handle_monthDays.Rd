@@ -4,15 +4,39 @@
 \alias{handle_monthDays}
 \title{Reformat "month-day" information}
 \usage{
-handle_monthDays(x)
+handle_monthDays(x, out = "Jan-01", outSep = "-")
 }
 \arguments{
 \item{x}{A vector containing strings in which the month is clear. For a
 list, use \code{handled <- lapply(x, handle_monthDays)}.}
+
+\item{out}{How should the monthDays be returned? Choose from any of the
+following (using the examples of 20th June and 5th March). Note the
+ambiguity in the last options.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    "Jan-01"   returns "Jun-20"   "Mar-05"
+    "01-Jan"   returns "Jun-20"   "05-Mar"
+    "mm-dd"    returns "20-06"    "03-05"
+    "dd-mm"    returns "06-20"    "05-03"
+    "m-d"      returns "6-20"     "3-5"
+    "d-m"      returns "20-6"     "5-3"
+}\if{html}{\out{</div>}}}
+
+\item{outSep}{Which symbol should be placed between the date and month?
+Default is "-", but will accept any string.}
 }
 \description{
 This function reformats month-day combinations to match
-"Jun-04".
+either "Jun-04", "04-Jun", "06-04", "04-06", "6-4", or "4-6". The
+last are ambiguous but can be useful in defined situations, for example
+pasting with a year to create a date.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    Jun-04
+    06-04
+    04-06
+    4-6
+    6-4
+}\if{html}{\out{</div>}}
 
 This function should work as long as the month is unambiguous in a string
 with a reasonable separator (see below). It can handle these inputs:
@@ -26,6 +50,8 @@ The Jan can also be "jan", "January", or "jan".
 }\if{html}{\out{</div>}}
 
 \strong{note} This function cannot handle unambiguous combinations (e.g.
-02/01). It also doesn't (currently) strip out any year information in
-the date.
+02/01) as input. It can return them (for e.g. pasting with a year).
+
+It can also strip the month-date out of a date if it is entered in the
+format YYYY-MM-DD or DD-MM-YYYY. But \strong{NOT} MM-DD-YYYY.
 }
