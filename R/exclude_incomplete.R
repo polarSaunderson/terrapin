@@ -6,8 +6,9 @@ exclude_incomplete_years <- function(x,
   #' @description The `exclude_x` functions are easiest to explain with
   #'   theoretical examples. See "Explaining the Exclude Functions" below.
   #'
-  #'   **!!! WARNING !!!** Be very careful and deliberate with these functions
-  #'   to know exactly what is being excluded.
+  #'   **___!!! WARNING !!!___**
+  #'   Be very careful and deliberate with these functions to know exactly what
+  #'   is being excluded.
   #'
   #' @details # Explaining the Exclude Functions
   #'
@@ -28,21 +29,27 @@ exclude_incomplete_years <- function(x,
   #'   ```
   #'
   #'   Imagine the following questions:
-  #'      - A) Is the mean January value greater than the mean Feb value?\n
-  #'      - B) Is the mean January value greater than the mean Apr value?\n
-  #'      - C) Is the mean 1980 value greater than the mean 1981 value?\n
-  #'      - D) Is the mean 1980 value greater than the mean 1983 value?\n
   #'
-  #'   Questions A is easy; there are 4 January datasets and 4 February datasets
-  #'   in the same years.
+  #'   ```
+  #'      - (A) Is the mean January value greater than the mean Feb value?
+  #'      - (B) Is the mean January value greater than the mean Apr value?
+  #'      - (C) Is the mean 1980 value greater than the mean 1981 value?
+  #'      - (D) Is the mean 1980 value greater than the mean 1983 value?
   #'
-  #'   Question B is less clear. Does it make sense to compare the mean of the
-  #'   Jan data in 4 years with the mean of the Apr data in 2 years?
+  #'     Questions A is easy; there are 4 January datasets and
+  #'     4 February datasets in the same years.
   #'
-  #'   Question C is easy; the same 4 months in 1980 and in 1981 have data.
+  #'     Question B is less clear. Does it make sense to compare
+  #'     the mean of the Jan data in 4 years with the mean of
+  #'     the Apr data in 2 years?
   #'
-  #'   Question D is again less clear. Does it make sense to compare the mean
-  #'   of 4 months in 1980 with the mean of 2 months in 1983?
+  #'     Question C is easy; the same 4 months in 1980 and in
+  #'     1981 have data.
+  #'
+  #'     Question D is again less clear. Does it make sense to
+  #'     compare the mean of 4 months in 1980 with the mean of
+  #'     2 months in 1983?
+  #'   ```
   #'
   #'   The `exclude_x` functions can help wrangle the data to answer these
   #'   questions. However, these functions are very happy to exclude data, so be
@@ -62,7 +69,8 @@ exclude_incomplete_years <- function(x,
   #'       year 1981:     Jan 1981, Feb 1981, Mar 1981, Apr 1981
   #'   ```
   #'
-  #'   *note* With this function, we remove the incomplete rows in the gridded
+  #'   *note:*
+  #'   With this function, we remove the incomplete rows in the gridded
   #'   representation of the xData.
   #'
   #'   **Why?** Our dataset has Jan, Feb, Mar and Apr data. However, there is only
@@ -90,8 +98,9 @@ exclude_incomplete_years <- function(x,
   #'       year 1983:     Jan 1983, Feb 1983
   #'   ```
   #'
-  #'   *note* With this function, we remove the incomplete columns in the
-  #'   gridded representation of the xData.
+  #'   *note:*
+  #'   With this function, we remove the incomplete columns in the gridded
+  #'   representation of the xData.
   #'
   #'   **Why?** The xData dataset has data in 4 months (Jan, Feb, Mar, Apr).
   #'   However, there is no Mar and Apr data available in each of the years
@@ -102,7 +111,7 @@ exclude_incomplete_years <- function(x,
   #'   For Question D, we can now mean all of the data in 1980 (Jan, Feb) and
   #'   mean all of the data in 1981 (Jan, Feb), and compare the values.
   #'
-  #'   ## Resolution
+  #'   ## Temporal Resolution
   #'
   #'   The above examples are based on using monthly resolution data (i.e. Jan,
   #'   not Jan 1st, Jan 2nd, Jan 3rd...). For the [exclude_incomplete_years()]
@@ -119,7 +128,7 @@ exclude_incomplete_years <- function(x,
   #'   into the function name. The equivalent for daily data requires the
   #'   [exclude_unmatched_days()] function.
   #'
-  #'   ## Years vs Austral Summers / Years
+  #'   ## Years vs Austral Summers
   #'   The above examples were based on the gridded representation of xData
   #'   using years as the rows. Often in the southern hemisphere it makes more
   #'   sense to think of austral years, particularly in the summer where (e.g.)
@@ -150,10 +159,12 @@ exclude_incomplete_years <- function(x,
   #'       summer 1983:     Nov 1982, Dec 1982, Jan 1983
   #'   ```
   #'
-  #'   *note* With this function, we remove the incomplete columns in the
+  #'   *note:*
+  #'   With this function, we remove the incomplete columns in the
   #'   gridded representation of the sData (when rows are summers).
   #'
-  #'   *BEWARE* If 'australSplit' had been set as FALSE (so the gridded
+  #'   *___!!! Beware !!!___*
+  #'   If 'australSplit' had been set as FALSE (so the gridded
   #'   representation uses years as rows), all data would have been excluded:
   #'
   #'       - Nov and Dec are not found in 1983;
@@ -187,7 +198,7 @@ exclude_incomplete_years <- function(x,
   #'       summer 1982:     Nov 1981, Dec 1981, Jan 1982, Feb 1982
   #'   ```
   #'
-  #'   *note* With this function, we remove the incomplete rows in the
+  #'   *note:* With this function, we remove the incomplete rows in the
   #'   gridded representation of the sData (when rows are summers).
   #'
   #' @param x The SpatRaster data to subset.

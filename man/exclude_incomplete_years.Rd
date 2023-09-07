@@ -20,8 +20,9 @@ function runs to clarify which data is being excluded and which included.}
 The \code{exclude_x} functions are easiest to explain with
 theoretical examples. See "Explaining the Exclude Functions" below.
 
-\strong{!!! WARNING !!!} Be very careful and deliberate with these functions
-to know exactly what is being excluded.
+\strong{\emph{\strong{!!! WARNING !!!}}}
+Be very careful and deliberate with these functions to know exactly what
+is being excluded.
 }
 \section{Explaining the Exclude Functions}{
 \subsection{Premise}{
@@ -41,21 +42,26 @@ what happens).
 }\if{html}{\out{</div>}}
 
 Imagine the following questions:
-- A) Is the mean January value greater than the mean Feb value?\n
-- B) Is the mean January value greater than the mean Apr value?\n
-- C) Is the mean 1980 value greater than the mean 1981 value?\n
-- D) Is the mean 1980 value greater than the mean 1983 value?\n
 
-Questions A is easy; there are 4 January datasets and 4 February datasets
-in the same years.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{   - (A) Is the mean January value greater than the mean Feb value?
+   - (B) Is the mean January value greater than the mean Apr value?
+   - (C) Is the mean 1980 value greater than the mean 1981 value?
+   - (D) Is the mean 1980 value greater than the mean 1983 value?
 
-Question B is less clear. Does it make sense to compare the mean of the
-Jan data in 4 years with the mean of the Apr data in 2 years?
+  Questions A is easy; there are 4 January datasets and
+  4 February datasets in the same years.
 
-Question C is easy; the same 4 months in 1980 and in 1981 have data.
+  Question B is less clear. Does it make sense to compare
+  the mean of the Jan data in 4 years with the mean of
+  the Apr data in 2 years?
 
-Question D is again less clear. Does it make sense to compare the mean
-of 4 months in 1980 with the mean of 2 months in 1983?
+  Question C is easy; the same 4 months in 1980 and in
+  1981 have data.
+
+  Question D is again less clear. Does it make sense to
+  compare the mean of 4 months in 1980 with the mean of
+  2 months in 1983?
+}\if{html}{\out{</div>}}
 
 The \code{exclude_x} functions can help wrangle the data to answer these
 questions. However, these functions are very happy to exclude data, so be
@@ -76,7 +82,8 @@ excluded.
     year 1981:     Jan 1981, Feb 1981, Mar 1981, Apr 1981
 }\if{html}{\out{</div>}}
 
-\emph{note} With this function, we remove the incomplete rows in the gridded
+\emph{note:}
+With this function, we remove the incomplete rows in the gridded
 representation of the xData.
 
 \strong{Why?} Our dataset has Jan, Feb, Mar and Apr data. However, there is only
@@ -105,8 +112,9 @@ excluded.
     year 1983:     Jan 1983, Feb 1983
 }\if{html}{\out{</div>}}
 
-\emph{note} With this function, we remove the incomplete columns in the
-gridded representation of the xData.
+\emph{note:}
+With this function, we remove the incomplete columns in the gridded
+representation of the xData.
 
 \strong{Why?} The xData dataset has data in 4 months (Jan, Feb, Mar, Apr).
 However, there is no Mar and Apr data available in each of the years
@@ -118,7 +126,7 @@ For Question D, we can now mean all of the data in 1980 (Jan, Feb) and
 mean all of the data in 1981 (Jan, Feb), and compare the values.
 }
 
-\subsection{Resolution}{
+\subsection{Temporal Resolution}{
 
 The above examples are based on using monthly resolution data (i.e. Jan,
 not Jan 1st, Jan 2nd, Jan 3rd...). For the \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}}
@@ -136,7 +144,7 @@ into the function name. The equivalent for daily data requires the
 \code{\link[=exclude_unmatched_days]{exclude_unmatched_days()}} function.
 }
 
-\subsection{Years vs Austral Summers / Years}{
+\subsection{Years vs Austral Summers}{
 
 The above examples were based on the gridded representation of xData
 using years as the rows. Often in the southern hemisphere it makes more
@@ -168,10 +176,12 @@ data is excluded.
     summer 1983:     Nov 1982, Dec 1982, Jan 1983
 }\if{html}{\out{</div>}}
 
-\emph{note} With this function, we remove the incomplete columns in the
+\emph{note:}
+With this function, we remove the incomplete columns in the
 gridded representation of the sData (when rows are summers).
 
-\emph{BEWARE} If 'australSplit' had been set as FALSE (so the gridded
+\emph{\emph{\strong{!!! Beware !!!}}}
+If 'australSplit' had been set as FALSE (so the gridded
 representation uses years as rows), all data would have been excluded:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  - Nov and Dec are not found in 1983;
@@ -207,7 +217,7 @@ excluded.
     summer 1982:     Nov 1981, Dec 1981, Jan 1982, Feb 1982
 }\if{html}{\out{</div>}}
 
-\emph{note} With this function, we remove the incomplete rows in the
+\emph{note:} With this function, we remove the incomplete rows in the
 gridded representation of the sData (when rows are summers).
 }
 }
