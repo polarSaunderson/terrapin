@@ -11,11 +11,9 @@ subset_by_month(x, months, excludeIncomplete = FALSE, dailyResolution = FALSE)
 case it is interpreted as a filePath and read in, or an existing
 SpatRaster.}
 
-\item{months}{vector: Which month/s to return? Input as either the month
-number (12), the full month name ("December" or "december"), or the
-abbreviated month name ("Dec" or "dec"). Multiple months can be input at
-once as vector (e.g. c(12, 1, 2)), but \strong{do not} try to mix strings and
-numbers in the vector.}
+\item{months}{vector: Which month/s to return? Input is fed directly into
+\code{\link[=get_months]{get_months()}} to handle different formats, but either 12, "12", "Dec",
+"December", "dec", or "december" should work.}
 
 \item{excludeIncomplete}{Be careful using this argument! It can
 dramatically affect the output of this function. Please read the

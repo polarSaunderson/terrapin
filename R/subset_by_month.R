@@ -9,11 +9,9 @@ subset_by_month <- function(x, months,
   #' @param x SpatRaster: The data to subset. Can be either a string, in which
   #'   case it is interpreted as a filePath and read in, or an existing
   #'   SpatRaster.
-  #' @param months vector: Which month/s to return? Input as either the month
-  #'   number (12), the full month name ("December" or "december"), or the
-  #'   abbreviated month name ("Dec" or "dec"). Multiple months can be input at
-  #'   once as vector (e.g. c(12, 1, 2)), but **do not** try to mix strings and
-  #'   numbers in the vector.
+  #' @param months vector: Which month/s to return? Input is fed directly into
+  #'   [get_months()] to handle different formats, but either 12, "12", "Dec",
+  #'   "December", "dec", or "december" should work.
   #' @param excludeIncomplete Be careful using this argument! It can
   #'   dramatically affect the output of this function. Please read the
   #'   Explanation in [exclude_incomplete_years()] first.
@@ -38,12 +36,11 @@ subset_by_month <- function(x, months,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Handle if months is "dec", "Dec", "December" or "december" instead of 12
-  if (isFALSE(is.numeric(months[1]))) {
-    months <- which(tolower(month.abb) %in% substring(tolower(months), 1, 3))
-  }
+  # Handle different monthly inputs; uses `retrieve_months` rather than just
+  # `handle_months` so that full dates can be entered.
+  months <- get_months(x = months, out = 1, throwError = TRUE)
 
-    # Handle if x is a filename
+  # Handle if x is a filename
   if ("SpatRaster" %notIn% is(x)) {
     x <- terra::rast(x)
   }

@@ -1,5 +1,5 @@
 handle_months <- function(x, out = 1) {
-  #' Reformat month data regardless of how it is entered
+  #' Reformat "month" information
   #'
   #' @description Often it is necessary to swap between representations of
   #'   months which is simple but just requires pointless, fiddly code. This
@@ -26,10 +26,10 @@ handle_months <- function(x, out = 1) {
   #'       "jan"      lower case abbreviation
   #'       "January"  Capitalised Name
   #'       "january"  lower case name
-  #'       "J"        Capital initial - only as output
-  #'       "j"        lower case initial - only as output
+  #'       "J"        Capital initial (only as output)
+  #'       "j"        lower case initial (only as output)
   #'
-  #'   To re-emphasize, the initials cannot be used as input because they are
+  #'   To re-emphasize, initials *cannot* be used as input because they are
   #'   ambiguous. However, they can be returned if you really want to use them.
   #'
   #' @seealso retrieve_months
@@ -39,57 +39,68 @@ handle_months <- function(x, out = 1) {
   # Code -----------------------------------------------------------------------
   # Account for different inputs
   x <- as.character(x)  # treat numbers as strings so we just deal with strings
+  xlower <- tolower(x)  # for comparisons & leaves x separate for "asis" option
 
   # Super fun nested ifelse
-  y <- ifelse(test = tolower(x) %in% c("01", "1", "jan", "january"),
+  y <- ifelse(test = xlower %in% c("01", "1", "jan", "january"),
              yes  = 1,
              no   = ifelse(
-               test = x %in% c("02", "2", "feb", "february"),
+               test = xlower %in% c("02", "2", "feb", "february"),
                yes  = 2,
                no   = ifelse(
-                 test = x %in% c("03", "3", "mar", "march"),
+                 test = xlower %in% c("03", "3", "mar", "march"),
                  yes  = 3,
                  no   = ifelse(
-                   test = x %in% c("04", "1", "apr", "april"),
+                   test = xlower %in% c("04", "1", "apr", "april"),
                    yes  = 4,
                    no   = ifelse(
-                     test = x %in% c("05", "1", "may"),
+                     test = xlower %in% c("05", "1", "may"),
                      yes  = 5,
                      no   = ifelse(
-                       test = x %in% c("06", "6", "jun", "june"),
+                       test = xlower %in% c("06", "6", "jun", "june"),
                        yes  = 6,
                        no   = ifelse(
-                         test = x %in% c("07", "7", "jul", "july"),
+                         test = xlower %in% c("07", "7", "jul", "july"),
                          yes  = 7,
                          no   = ifelse(
-                           test = x %in% c("08", "8", "aug", "august"),
+                           test = xlower %in% c("08", "8", "aug", "august"),
                            yes  = 8,
                            no   = ifelse(
-                             test = x %in% c("09", "9", "sep", "september"),
+                             test = xlower %in% c("09", "9", "sep", "september"),
                              yes  = 9,
                              no   = ifelse(
-                               test = x %in% c("10", "oct", "october"),
+                               test = xlower %in% c("10", "oct", "october"),
                                yes  = 10,
                                no   = ifelse(
-                                 test = x %in% c("11", "nov", "november"),
+                                 test = xlower %in% c("11", "nov", "november"),
                                  yes  = 11,
                                  no   = ifelse(
-                                   test = x %in% c("12", "dec", "december"),
+                                   test = xlower %in% c("12", "dec", "december"),
                                    yes  = 12,
                                    no   = x)))))))))))) |> as.numeric()
 
-  # Create output. Valid options: "01", "1", 1, Jan, jan, January, january
+  # Create output.
+  # Valid strings: 01, 1, Jan, jan, January, january
+  #                       Mon, mon, Month,   month
+  # Valid numeric: 1
+
   if (is.numeric(out)) return(y)        # just give the numbers back
 
   # Else we want a string
   z <- switch(out,
               "1"       = as.character(y),
               "01"      = sprintf("%02d", as.numeric(y)),
+              "Month"   = ,
               "January" = month.name[y],
+              "month"   = ,
               "january" = month.name[y] |> tolower(),
+              "Mon"     = ,
               "Jan"     = month.abb[y],
+              "mon"     = ,
               "jan"     = month.abb[y] |> tolower(),
+              "M"       = ,
               "J"       = month.abb[y] |> substring(1, 1),
+              "m"       = ,
               "j"       = month.abb[y] |> towlower() |> substring(1, 1),
               y)        # just return the number string (or invalid months if entered)
 

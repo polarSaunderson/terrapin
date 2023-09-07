@@ -10,6 +10,9 @@ The public version of this repo can be accessed at:
   https://github.com/polarSaunderson/terrapin
 
 ## To-Do
+### 2023-09-07
+- [ ] Think about monthDay, year and day equivalents to retrieve_months
+
 ### 2023-08-10
 - [ ] Should any of the racmoR functions be in terrapin?
   - [ ] exclude functions

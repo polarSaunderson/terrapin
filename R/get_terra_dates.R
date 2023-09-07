@@ -40,7 +40,7 @@ get_terra_dates <- function(x,
     time[!naDates]     <- format(dates[!naDates], "%H:%M")
     year[!naDates]     <- format(dates[!naDates], "%Y") |> as.numeric()
     month[!naDates]    <- format(dates[!naDates], "%m") |> as.numeric()
-    monthDay[!naDates] <- format(dates[!naDates], "%m-%d")
+    monthDay[!naDates] <- format(dates[!naDates], "%b-%d")
     day[!naDates]      <- format(dates[!naDates], "%d") |> as.numeric()
   }
   rasterDates <- data.frame(date, year, month, day, time, monthDay)

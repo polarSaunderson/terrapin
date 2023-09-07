@@ -1,20 +1,25 @@
-retrieve_months <- function(x, out = "Jan", throwError = TRUE) {
-  #' Find the month from common date formats
+get_months <- function(x, out = "Jan", throwError = TRUE) {
+  #' Find the month within common date formats
   #'
-  #' @description Sometimes it makes sense to use a full date ("2001-January-15"),
+  #' @description Sometimes it makes sense to use a full date ("15-January-2001"),
   #'   but often it is much more common to use (e.g.) "Jan-15", "January 15", or
-  #'   even just in reverse - "15-January-2001". This function simply extracts
+  #'   even just in reverse - "2001-January-15". This function simply extracts
   #'   the January part of the date, and returns it in the specified format.
   #'   See "Accepted Formats" below; this is implemented with [handle_months()].
+  #'   It is also possible to use "asis", which returns the month part as it was
+  #'   input (but ignores any day or year parts).
   #'
-  #'   **Note** It will not accept dates such as "01-02", because it is unclear
-  #'   whether that refers to January 2nd or 1st February. However, it
-  #'   understands that "01-13" or "13-01" both refer to January (i.e. there is
-  #'   no month 13!).
+  #'   **Note:** Dates can be separated with any of these: " ", "_", "-", "/".
   #'
-  #'   **Note** It will not accept the MM-DD-YYYY format. It will accept either
-  #'   DD-MM-YYYY, D-M-YY, or YYYY-MM-DD, etc.. It essentially checks if the
-  #'   input has three parts, and returns the middle value.
+  #'   **Note:** The function will not accept dates such as "01-02", because it
+  #'   is unclear whether that refers to January 2nd or 1st February. However,
+  #'   it understands that "01-13" or "13-01" both refer to January (i.e. there
+  #'   is no month 13!).
+  #'
+  #'   **Note:** It **will not** accept the MM-DD-YYYY format. It **will**
+  #'   accept either DD-MM-YYYY, D-M-YY, or YYYY-MM-DD, etc. The function
+  #'   essentially checks if the input has three parts, and returns the middle
+  #'   value if so.
   #'
   #' @inheritSection handle_months Accepted Formats
   #'
@@ -33,7 +38,7 @@ retrieve_months <- function(x, out = "Jan", throwError = TRUE) {
     # Test 1 - Is the date already in there? -----------------------------------
     y <- tolower(x)
     monthRef <- tolower(c(month.abb, month.name))
-    z1 <- y[y %in% monthRef]
+    z1 <- x[y %in% monthRef]
     if (length(z1) > 0) return(z1)
 
     # Test 2 - Is it just a single number (e.g. "1" or "01")? ------------------
@@ -90,14 +95,21 @@ retrieve_months <- function(x, out = "Jan", throwError = TRUE) {
 
   # Applying the function to get the month out! --------------------------------
   # Handle if date contains " ", "/", or "-" separations
-  x <- gsub(pattern = "/", replacement = "-", x = x)
-  x <- gsub(pattern = " ", replacement = "-", x = x)
+  x <- gsub(pattern = "/", replacement = "-", x = x) |>
+    gsub(pattern = "_", replacement = "-") |>
+    gsub(pattern = " ", replacement = "-")
 
   # Get the month
   xSplit <- strsplit(x, "-")
   xMonth <- lapply(xSplit, identify_month)
 
   # Format
-  xOut   <- terrapin::handle_months(xMonth, out = out)
+  if (out != "asis") {
+    xOut <- terrapin::handle_months(xMonth, out = out)
+  } else {
+    xOut <- unlist(xMonth)
+  }
+
+  # Return
   return(xOut)
 }

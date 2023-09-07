@@ -16,20 +16,25 @@ subset_by_monthDay(
 case it is interpreted as a filePath and read in, or an existing
 SpatRaster.}
 
-\item{monthDays}{Used for specific dates. Input must be a vector of
-monthDays in the format "MM-DD".
+\item{monthDays}{Used for specific dates. A vector of monthDays, best
+formatted as "Jan-14" or "14-Jan". Fed directly into \code{\link[=handle_monthDays]{handle_monthDays()}}
+to identify and reformat the month-day for matching against the
+SpatRaster dates.
 
-For example, \code{c("01-02", "02-07")} will find any layers that occur on the
-1st of January or the 2nd of February in the 'x' dataset, regardless of
-the layers' year.}
+As an example, using a vector of \verb{c("Jan-01", "7 Feb", "15/Mar)} will
+find any layers that occur on the 1st of January or the 7th of February
+or the 15th March in the 'x' dataset, regardless of the layers' year.
+
+\strong{Note:} Something like "01/02" will fail. It is ambiguous.}
 
 \item{monthDayList}{Used for extended periods of dates. Input must be a
 list of vectors, with the first value in each vector indicating when the
 period begins, and the second when the period ends.
 
-For example, \code{list(c("01-02", "01-04"), c("02-07", "02-09"))} will return
-all layers that occur on the 2nd, 3rd or 4th January, or on the 7th, 8th
-or 9th of February in the dataset, regardless of the layers' year.}
+For example, \code{list(c("Jan-02", "Jan-04"), c("Feb-07", "Feb-09"))} will
+return all layers that occur on the 2nd, 3rd or 4th January, or on the
+7th, 8th or 9th of February in the dataset, regardless of the layers'
+year.}
 
 \item{excludeIncomplete}{Be careful using this argument! It can
 dramatically affect the output of this function. Please read the

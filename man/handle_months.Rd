@@ -2,7 +2,7 @@
 % Please edit documentation in R/handle_months.R
 \name{handle_months}
 \alias{handle_months}
-\title{Reformat month data regardless of how it is entered}
+\title{Reformat "month" information}
 \usage{
 handle_months(x, out = 1)
 }
@@ -33,11 +33,11 @@ Input and output can be in the following formats:
   "jan"      lower case abbreviation
   "January"  Capitalised Name
   "january"  lower case name
-  "J"        Capital initial - only as output
-  "j"        lower case initial - only as output
+  "J"        Capital initial (only as output)
+  "j"        lower case initial (only as output)
 }\if{html}{\out{</div>}}
 
-To re-emphasize, the initials cannot be used as input because they are
+To re-emphasize, initials \emph{cannot} be used as input because they are
 ambiguous. However, they can be returned if you really want to use them.
 }
 
