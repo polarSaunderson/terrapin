@@ -44,7 +44,7 @@ subset_by_monthDay <- function(x,
 
   # Handle different formats
   if (!is.null(monthDays)) {
-    monthDays <- handle_monthDays(monthDays)
+    monthDays <- handle_monthDays(monthDays, out = "mm-dd")
   }
 
   if (!is.null(monthDayList)) {
@@ -73,16 +73,16 @@ subset_by_monthDay <- function(x,
     endEach   <- sapply(monthDayList, "[[", 2)
 
     # Do the dates cross the new year?
-    startMonth <- strsplit(startEach, "-") |> sapply("[[", 1) |> as.numeric()
-    endMonth   <- strsplit(endEach, "-")   |> sapply("[[", 1) |> as.numeric()
+    startMonth <- get_months(startEach, 1)
+    endMonth   <- get_months(endEach, 1)
 
     # Create fake dates (i.e. add a year to the month and day)
     # Allows start:end for the ranges
     fakeStart  <- ifelse(test = endMonth < startMonth,
                          yes  = "1979",
                          no   = "1980") |>
-      paste(startEach, sep = "-")
-    fakeEnd    <- paste("1980", endEach, sep = "-")
+      paste(handle_monthDays(startEach, "mm-dd"), sep = "-")
+    fakeEnd    <- paste("1980", handle_monthDays(endEach, "mm-dd"), sep = "-")
 
     # Get all dates in between the start and end dates (inclusive)
     fakeDates  <- c() # preallocate
@@ -92,7 +92,8 @@ subset_by_monthDay <- function(x,
     }
 
     # Strip away the fake dates
-    monthDays <- as.Date(fakeDates, "1970-01-01") |> strftime("%m-%d")
+    monthDays <- as.Date(fakeDates, "1970-01-01") |>
+      handle_monthDays(out = "Jan-01")
   }
 
   # Subset Data ----------------------------------------------------------------
