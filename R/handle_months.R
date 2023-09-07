@@ -1,10 +1,21 @@
-handle_months <- function(x, out = "01") {
+handle_months <- function(x, out = 1) {
   #' Reformat month data regardless of how it is entered
   #'
   #' @description Often it is necessary to swap between representations of
-  #'   months but this is just pointless fiddly code. This function simply (via
-  #'   the help of a horrific nested `ifelse`!) handles common inputs, and
-  #'   returns them in a specified format.
+  #'   months which is simple but just requires pointless, fiddly code. This
+  #'   function simply (via the help of a horrific nested `ifelse`!) handles
+  #'   common input formats for months, and returns them in a specified format.
+  #'   See the "Accepted Formats" section below.
+  #'
+  #' @param x A vector of months in any of the above formats. If values don't
+  #'   correspond to these formats, the value is silently returned as it was
+  #'   input (no warning!).
+  #' @param out How should the months be returned? Choose from any of the above
+  #'   formats. If any other values are used, the numeric representation of the
+  #'   month is used (e.g. 1 for January) or the input x, if it didn't
+  #'   correspond to a valid month.
+  #'
+  #' @details # Accepted Formats
   #'
   #'   Input and output can be in the following formats:
   #'
@@ -21,13 +32,7 @@ handle_months <- function(x, out = "01") {
   #'   To re-emphasize, the initials cannot be used as input because they are
   #'   ambiguous. However, they can be returned if you really want to use them.
   #'
-  #' @param x A vector of months in any of the above formats. If values don't
-  #'   correspond to these formats, the value is silently returned as it was
-  #'   input (no warning!).
-  #' @param out How should the months be returned? Choose from any of the above
-  #'   formats. If any other values are used, the numeric representation of the
-  #'   month is used (e.g. 1 for January) or the input x, if it didn't
-  #'   correspond to a valid month.
+  #' @seealso retrieve_months
   #'
   #' @export
 

@@ -4,7 +4,7 @@
 \alias{handle_months}
 \title{Reformat month data regardless of how it is entered}
 \usage{
-handle_months(x, out = "01")
+handle_months(x, out = 1)
 }
 \arguments{
 \item{x}{A vector of months in any of the above formats. If values don't
@@ -18,10 +18,12 @@ correspond to a valid month.}
 }
 \description{
 Often it is necessary to swap between representations of
-months but this is just pointless fiddly code. This function simply (via
-the help of a horrific nested \code{ifelse}!) handles common inputs, and
-returns them in a specified format.
-
+months which is simple but just requires pointless, fiddly code. This
+function simply (via the help of a horrific nested \code{ifelse}!) handles
+common input formats for months, and returns them in a specified format.
+See the "Accepted Formats" section below.
+}
+\section{Accepted Formats}{
 Input and output can be in the following formats:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  1          numeric
@@ -37,4 +39,8 @@ Input and output can be in the following formats:
 
 To re-emphasize, the initials cannot be used as input because they are
 ambiguous. However, they can be returned if you really want to use them.
+}
+
+\seealso{
+retrieve_months
 }
