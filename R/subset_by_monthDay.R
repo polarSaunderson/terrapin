@@ -43,11 +43,11 @@ subset_by_monthDay <- function(x,
   }
 
   # Handle different formats
-  if (!is.null(monthDays)) {
-    monthDays <- handle_monthDays(monthDays, out = "mm-dd")
+  if (!is.null(monthDays[1])) {
+    monthDays <- handle_monthDays(monthDays, out = "Jan-01")
   }
 
-  if (!is.null(monthDayList)) {
+  if (!is.null(monthDayList[1])) {
     monthDayList <- lapply(monthDayList, handle_monthDays)
   }
 
