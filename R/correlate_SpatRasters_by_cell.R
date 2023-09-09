@@ -1,4 +1,4 @@
-correlate_SpatRasters_by_cell <- function(xy, detrend, method) {
+correlate_by_cell <- function(xy, detrend, method = "pearson") {
   #' Calculates the per-pixel correlation between 2 SpatRasters
   #'
   #' @description Say we have a temperature SpatRaster with 20 layers, and a
@@ -16,6 +16,24 @@ correlate_SpatRasters_by_cell <- function(xy, detrend, method) {
   #'   correlation?
   #' @param method "string": Which correlation coefficient to use? One of
   #'   "pearson", "kendall", or "spearman". See `stats::cor.test()`.
+  #'
+  #' @examples
+  #'   \dontrun{
+  #'     # We want to correlate x with y
+  #'     x <- terra::rast("pretend1.nc")   # n layers
+  #'     y <- terra::rast("pretend2.nc")   # also n layers
+  #'
+  #'     # Combine
+  #'     xy <- c(x, y)
+  #'
+  #'     # Correlate using terra::app
+  #'     koral <- terra::app(x = xy,
+  #'                         detrend = TRUE,
+  #'                         method  = "pearson",
+  #'                         fun = correlate_by_cell)
+  #'
+  #'     names(koral) <- c("estimate", "pValue")
+  #'   }
   #'
   #' @export
 
