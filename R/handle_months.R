@@ -101,7 +101,7 @@ handle_months <- function(x, out = 1) {
               "M"       = ,
               "J"       = month.abb[y] |> substring(1, 1),
               "m"       = ,
-              "j"       = month.abb[y] |> towlower() |> substring(1, 1),
+              "j"       = month.abb[y] |> tolower() |> substring(1, 1),
               y)        # just return the number string (or invalid months if entered)
 
   return(z)

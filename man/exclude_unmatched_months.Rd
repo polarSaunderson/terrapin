@@ -165,7 +165,7 @@ Dec 1991 and Jan 1992 should be considered together as part of summer
 }\if{html}{\out{</div>}}
 }
 
-\subsection{Example 3: \link{exclude_unmatched_months(australSplit = 3)}}{
+\subsection{Example 3: \code{exclude_unmatched_months(australSplit = 3)}}{
 
 \strong{Result}: Using \code{exclude_unmatched_months(australSplit = 3)}, the Feb
 data is excluded.

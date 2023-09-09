@@ -41,7 +41,7 @@ subset_by_month <- function(x, months,
   months <- get_months(x = months, out = 1, throwError = TRUE)
 
   # Handle if x is a filename
-  if ("SpatRaster" %notIn% is(x)) {
+  if ("SpatRaster" %notIn% methods::is(x)) {
     x <- terra::rast(x)
   }
 

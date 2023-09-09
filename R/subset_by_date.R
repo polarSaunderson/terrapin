@@ -64,7 +64,7 @@ subset_by_date <- function(x,
   }
 
   # Handle if x is a filename
-  if ("SpatRaster" %notIn% is(x)) {
+  if ("SpatRaster" %notIn% methods::is(x)) {
     x <- terra::rast(x)
   }
 
@@ -88,33 +88,7 @@ subset_by_date <- function(x,
   dateIndex <- which(xDates$date %in% dates)
 
   # Subset
-  xSubset <- terra::subset(x, mdIndex)
+  xSubset <- terra::subset(x, dateIndex)
 
   return(xSubset)
 }
-
-#
-#   # Preallocate to later subset with
-#   dateIndex <- rep(NA, length(dates))
-#
-#   # Identify which layers need subsetting
-#   for (ii in seq_along(dates)) {
-#     # Prep the ii data
-#     iiDate  <- dates[[ii]]
-#     iiYear  <- format(as.Date(iiDate), "%Y") |> as.numeric()
-#     iiMonth <- format(as.Date(iiDate), "%m") |> as.numeric()
-#     iiDay   <- format(as.Date(iiDate), "%d") |> as.numeric()
-#
-#     # Retrieve & store the rownumber of the correct date layer
-#     dateIndex[ii] <- xDates[xDates$year == iiYear &
-#                               xDates$month == iiMonth &
-#                               xDates$day == iiDay, ] |>
-#       rownames() |>  # these should be numbers
-#       as.numeric()
-#   }
-#
-#   # Subset the data
-#   xSubset <- terra::subset(x, dateIndex)
-#
-#   return(xSubset)
-# }

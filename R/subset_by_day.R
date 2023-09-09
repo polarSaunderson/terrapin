@@ -19,7 +19,7 @@ subset_by_day <- function(x, days) {
 
   # Code -----------------------------------------------------------------------
   # Handle if x is a filename
-  if ("SpatRaster" %notIn% is(x)) {
+  if ("SpatRaster" %notIn% methods::is(x)) {
     x <- terra::rast(x)
   }
 

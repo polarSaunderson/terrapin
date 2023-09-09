@@ -145,7 +145,7 @@ exclude_incomplete_years <- function(x,
   #'       summer 1983:     Nov 1982, Dec 1982, Jan 1983
   #'   ```
   #'
-  #'   ## Example 3: [exclude_unmatched_months(australSplit = 3)]
+  #'   ## Example 3: `exclude_unmatched_months(australSplit = 3)`
   #'   **Result**: Using `exclude_unmatched_months(australSplit = 3)`, the Feb
   #'    data is excluded.
   #'

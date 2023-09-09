@@ -22,7 +22,7 @@ subset_by_summer <- function(x, summers,
 
   # Code -----------------------------------------------------------------------
   # Handle if x is a filename
-  if ("SpatRaster" %notIn% is(x)) {
+  if ("SpatRaster" %notIn% methods::is(x)) {
     x <- terra::rast(x)
   }
 

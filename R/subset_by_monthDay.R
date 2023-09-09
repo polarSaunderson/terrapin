@@ -52,14 +52,14 @@ subset_by_monthDay <- function(x,
   }
 
   # Handle if x is a filename
-  if ("SpatRaster" %notIn% is(x)) {
+  if ("SpatRaster" %notIn% methods::is(x)) {
     x <- terra::rast(x)
   }
 
   # Handle the various date entry options --------------------------------------
   if (!is.null(monthDayList)[1]) {
     # Handle if a c(start, end) vector is provided
-    if ("list" %notIn% is(monthDayList)) {
+    if ("list" %notIn% methods::is(monthDayList)) {
       if (length(monthDayList) == 2) {
         monthDayList <- list(monthDayList)
       } else {

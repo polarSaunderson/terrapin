@@ -24,7 +24,7 @@ subset_by_year <- function(x, years) {
 
   # Code -----------------------------------------------------------------------
   # Handle if x is a filename
-  if ("SpatRaster" %notIn% is(x)) {
+  if ("SpatRaster" %notIn% methods::is(x)) {
     x <- terra::rast(x)
   }
 
