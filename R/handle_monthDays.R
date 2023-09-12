@@ -38,19 +38,21 @@ handle_monthDays <- function(x, out = "Jan-01", outSep = "-") {
   #'
   #'   ```
   #'       "Jan-01"   returns "Jun-20"   "Mar-05"
-  #'       "01-Jan"   returns "Jun-20"   "05-Mar"
-  #'       "mm-dd"    returns "20-06"    "03-05"
-  #'       "dd-mm"    returns "06-20"    "05-03"
+  #'       "01-Jan"   returns "20-Jun"   "05-Mar"
+  #'       "mm-dd"    returns "06-20"    "03-05"
+  #'       "dd-mm"    returns "20-06"    "05-03"
   #'       "m-d"      returns "6-20"     "3-5"
   #'       "d-m"      returns "20-6"     "5-3"
   #'   ```
+  #'   The divider can be set using the 'outSep' argument.
+  #'
   #' @param outSep Which symbol should be placed between the date and month?
   #'   Default is "-", but will accept any string.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Define function to call with lapply
+  # Define internal function to call with lapply -------------------------------
   handle_monthDays_internally <- function(y, out, md, outSep) {
     # Find just the monthly part
     yMonth <- get_months(y, "asis")
@@ -134,7 +136,7 @@ handle_monthDays <- function(x, out = "Jan-01", outSep = "-") {
     return(x)
   }
 
-  # Prepare for different output options
+  # Prepare for different output options ---------------------------------------
   md  <- switch(tolower(out),
                 "mm-dd" = , "m-d" = , "mmdd" = , "md" = , "jan-1" = , "jan-01" = TRUE,
                 "dd-mm" = , "d-m" = , "ddmm" = , "dm" = , "1-jan" = , "01-jan" = FALSE,
@@ -155,7 +157,7 @@ handle_monthDays <- function(x, out = "Jan-01", outSep = "-") {
   # Remove any years in the dataset
   x <- strip_years(x)
 
-  # Apply the function
+  # Apply the function ---------------------------------------------------------
   xOut <- sapply(x, handle_monthDays_internally, out, md, outSep)
 
   return(xOut)
