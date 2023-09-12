@@ -1,6 +1,6 @@
 subset_by_date <- function(x,
                            dates = NULL,
-                           dateList = NULL) {
+                           periods = NULL) {
   #' Subset a SpatRaster based on the layers' date
   #'
   #' @description Easily select only layers of a SpatRaster that are on specific
@@ -21,16 +21,20 @@ subset_by_date <- function(x,
   #'   dates to return, each in the format "YYYY-MM-DD".
   #'
   #'   For example, c("2019-01-01", "2019-01-03", "2011-03-08") will return 3
-  #'   layers (3 is assuming those dates are available in the dataset and each
-  #'   date only appears once; if not, all instances of a date will be returned;
-  #'   if no dates match, an empty SpatRaster is returned).
-  #' @param dateList Used for extended periods of dates. Input must be a
-  #'   list of vectors, with the first value in each vector indicating when the
-  #'   period begins, and the second when the period ends.
+  #'   layers (3 layers assuming those dates are available in the dataset and
+  #'   each date only appears once; if not, all instances of a date will be
+  #'   returned; if no dates match, an empty SpatRaster is returned).
   #'
-  #'   For example, `list(c("2019-01-01", "2019-01-03"), c("2011-03-08", "2011-03-11")`
-  #'   will return the layers for 1st, 2nd and 3rd of January 2019, and the 8th,
-  #'   9th, 10th and 11th of March 2011.
+  #' @param periods Used for extended periods rather than individual dates.
+  #'   Input must be a vector, with the first value indicating when the period
+  #'   begins and the second when the period ends. For multiple periods, use a
+  #'   list of such vectors, for example:
+  #'      ```
+  #'      list(c("2019-01-01", "2019-01-03"),
+  #'           c("2011-03-08", "2011-03-11"))
+  #'      ````
+  #'   The above will return the layers for 1st, 2nd and 3rd of January 2019,
+  #'   and the 8th, 9th, 10th and 11th of March 2011.
   #'
   #' @examples
   #' \dontrun{
@@ -60,7 +64,7 @@ subset_by_date <- function(x,
     stop("No dates selected!")
   }
   if (!is.null(dates[1]) & !is.null(dateList[1])) {
-    stop("Please use either the dates or dateList argument, not both.")
+    stop("Please use either the dates or periods argument, not both.")
   }
 
   # Handle if x is a filename
@@ -70,6 +74,9 @@ subset_by_date <- function(x,
 
   # Format the dates as necessary - account for using dates or dateList argument
   if (!is.null(dateList)) {
+    # Handle if a single vector was supplied
+    if (!is.list(dateList)) dateList <- list(dateList)
+
     # If using the dateList argument
     dates <- c() # preallocate
 
@@ -78,7 +85,8 @@ subset_by_date <- function(x,
       iiDates <- as.Date(dateList[[ii]][1]):as.Date(dateList[[ii]][2])
       dates   <- c(dates, iiDates)
     }
-    dates <- as.Date(dates, "1970-01-01") # format as dates
+    dates <- as.Date(dates, "1970-01-01") |>
+      as.character()                           # format as string of dates
   }
 
   # Get all dates of the input
