@@ -1,12 +1,16 @@
-get_terra_dates <- function(x,
-                            australSplit = 3) {
-  #' Return a data frame of layer dates for a SpatRaster; useful for subsetting
+get_date_info <- function(x,
+                          australSplit = 3) {
+  #' Return a data frame of SpatRaster layer dates for subsetting
   #'
   #' @description Often it is necessary to select only a subset of layers in a
-  #'   dataset based on their date. For example, only layers in December, or in
-  #'   2017. This function creates a data frame with the necessary date
-  #'   information, which allows the correct layers to be identified and
-  #'   filtered. Only works with SpatRasters from the `terra` package.
+  #'   dataset based on their date or time. For example, only layers in
+  #'   December, only in 2017, or only in the afternoon. The date (and possibly
+  #'   time) information is stored in the SpatRaster; this function creates a
+  #'   simple data frame to hold the date information, thus allowing the correct
+  #'   layers to be identified and filtered. This only works with SpatRasters
+  #'   from the `terra` package, and they must have the date & time information
+  #'   necessary. Any missing data is assigned a value of NA. If the data has
+  #'   no time information, the time columns are excluded.
   #'
   #' @param x SpatRaster: The dataset.
   #' @param australSplit numeric: If not FALSE, create an additional column for
@@ -22,36 +26,57 @@ get_terra_dates <- function(x,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Get dates
-  dates   <- terra::time(x)
-  naDates <- is.na(dates)
+  # Get date (and time?) information
+  dateInfo <- terra::time(x)
+  naDates  <- is.na(dateInfo)
 
-  # Preallocate
-  date     <- rep(NA, length(dates))
-  year     <- rep(NA, length(dates))
-  time     <- rep(NA, length(dates))
-  monthDay <- rep(NA, length(dates))
-  month    <- rep(NA, length(dates))
-  day      <- rep(NA, length(dates))
+  # Preallocate for dates
+  date     <- rep(NA, length(dateInfo))
+  year     <- rep(NA, length(dateInfo))
+  month    <- rep(NA, length(dateInfo))
+  monthDay <- rep(NA, length(dateInfo))
+  day      <- rep(NA, length(dateInfo))
 
-  # Format dates into a dataframe
+  # Format dates
   if (sum(!naDates) > 0) {
-    date[!naDates]     <- format(dates[!naDates], "%F")
-    time[!naDates]     <- format(dates[!naDates], "%H:%M")
-    year[!naDates]     <- format(dates[!naDates], "%Y") |> as.numeric()
-    month[!naDates]    <- format(dates[!naDates], "%m") |> as.numeric()
-    monthDay[!naDates] <- format(dates[!naDates], "%b-%d")
-    day[!naDates]      <- format(dates[!naDates], "%d") |> as.numeric()
+    date[!naDates]     <- format(dateInfo[!naDates], "%F")
+    year[!naDates]     <- format(dateInfo[!naDates], "%Y") |> as.numeric()
+    month[!naDates]    <- format(dateInfo[!naDates], "%m") |> as.numeric()
+    monthDay[!naDates] <- format(dateInfo[!naDates], "%b-%d")
+    day[!naDates]      <- format(dateInfo[!naDates], "%d") |> as.numeric()
   }
-  rasterDates <- data.frame(date, year, month, day, time, monthDay)
 
-  # Austral summers
+  # Combine as a dataframe for $ access
+  rasterDates <- data.frame(date, year, month, day, monthDay)
+
+  # Add austral summer column
   if (!is.null(australSplit)) {
     if (australSplit %in% 1:12) {
       summer <- year
       summer[month > australSplit] <- summer[month > australSplit] + 1
       rasterDates$summer <- summer
     }
+  }
+
+  # Time information
+  if ("POSIXct" %in% is(dateInfo[[1]]) | "POSIXt" %in% is(dateInfo[[1]])) {
+    # Preallocate
+    time     <- rep(NA, length(dateInfo))
+    hour     <- rep(NA, length(dateInfo))
+    minute   <- rep(NA, length(dateInfo))
+    dateTime <- rep(NA, length(dateInfo))
+
+    # Format
+    time[!naDates]     <- format(dateInfo[!naDates], "%H:%M")
+    hour[!naDates]     <- format(dateInfo[!naDates], "%H") |> as.numeric()
+    minute[!naDates]   <- format(dateInfo[!naDates], "%M") |> as.numeric()
+    dateTime[!naDates] <- format(dateInfo[!naDates], "%F %H:%M")
+
+    # Store
+    rasterDates$time     <- time
+    rasterDates$hour     <- hour
+    rasterDates$minute   <- minute
+    rasterDates$dateTime <- dateTime
   }
 
   return(rasterDates)
