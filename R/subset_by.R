@@ -1,6 +1,6 @@
 subset_by <- function(x, type, exact = NULL,
                       before = NULL, after = NULL,
-                      between = NULL, except = NULL,
+                      except = NULL,
                       australSplit = 3) {
   #' Subset a SpatRaster based on the layers' dates
   #'
@@ -22,13 +22,11 @@ subset_by <- function(x, type, exact = NULL,
   #'   - minute    30
   #'
   #' @param exact vector: Values that the 'type' value must match exactly. Only
-  #'   one of these 5 arguments can be used at once.
+  #'   one of the criteria arguments can be used at once.
   #' @param before numeric: The maximum value that the 'type' value can have.
-  #'   Only one of these 5 arguments can be used at once.
+  #'   Only one of the criteria arguments can be used at once.
   #' @param after numeric: The minimum value that the 'type' value can have.
-  #'   Only one of these 5 arguments can be used at once.
-  #' @param between vector: The minimum and maximum values that the 'type' value
-  #'   can have; inclusive.
+  #'   Only one of the criteria arguments can be used at once.
   #' @param except vector: Values that the 'type' value cannot match.
   #' @param australSplit numeric: If not FALSE, create an additional column for
   #'   the austral summer / year. For example, December 1991 and January 1992
@@ -44,18 +42,8 @@ subset_by <- function(x, type, exact = NULL,
 
   # Code -----------------------------------------------------------------------
   # Guard: only one of the options can be used at once
-  nullCount <- 0
-  if (is.null(exact)) nullCount <- nullCount + 1
-  if (is.null(before)) nullCount <- nullCount + 1
-  if (is.null(after)) nullCount <- nullCount + 1
-  if (is.null(between[1])) nullCount <- nullCount + 1
-  if (is.null(except)) nullCount <- nullCount + 1
-  if (nullCount > 4) {
-    stop("Only one condition can be used at once")
-  } else if (nullCount == 5) {
-    warning("No conditions selected, returning the input")
-    return(x)
-  }
+  check_if_null(exact, before, after, except,
+                stopIfNoNull = TRUE, noNullMessage = "No dates selected!")
 
   # Handle if x is a filename
   x <- terra::rast(x, keeptime = TRUE, keepunits = TRUE, props = TRUE)
@@ -85,7 +73,7 @@ subset_by <- function(x, type, exact = NULL,
 
 subset_by_year <- function(x, years = NULL,
                            before = NULL, after = NULL,
-                           between = NULL, except = NULL) {
+                           except = NULL) {
   #' Subset a SpatRaster based on the layers' year
   #'
   #' @description Easily select only the layers of a SpatRaster depending on
@@ -102,13 +90,13 @@ subset_by_year <- function(x, years = NULL,
   # Code -----------------------------------------------------------------------
   xSubset <- subset_by(x, type = "year", exact = years,
                        before = before, after = after,
-                       between = between, except = except)
+                       except = except)
   return(xSubset)
 }
 
 subset_by_summer <- function(x, summers = NULL,
                              before = NULL, after = NULL,
-                             between = NULL, except = NULL,
+                             except = NULL,
                              australSplit = 3) {
   #' Subset a SpatRaster based on the layers' austral summer
   #'
@@ -127,9 +115,10 @@ subset_by_summer <- function(x, summers = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  xSubset <- subset_by(x, type = "summer", exact = summers,
+  xSubset <- subset_by(x, type = "summer",
+                       exact = summers,
                        before = before, after = after,
-                       between = between, except = except,
+                       except = except,
                        australSplit = australSplit)
   return(xSubset)
 }
@@ -138,7 +127,7 @@ subset_by_month <- function(x, months = NULL,
                             excludeIncomplete = FALSE,
                             dailyResolution = FALSE,
                             before = NULL, after = NULL,
-                            between = NULL, except = NULL) {
+                            except = NULL) {
   #' Subset a SpatRaster based on the layers' month
   #'
   #' @description Easily select only the layers of a SpatRaster depending on
@@ -149,7 +138,7 @@ subset_by_month <- function(x, months = NULL,
   #' @param months Which month/s to return? Use this argument for exact matches
   #'   (e.g. c(1:4, 8), otherwise leave this as NULL (the default) and use one
   #'   of the other arguments. This argument is fed through [get_months()], so
-  #'   can be input either as )e.g.) 12, "12", "Dec", "dec", "December", or
+  #'   can be input either as (e.g.) 12, "12", "Dec", "dec", "December", or
   #'   "december".
   #'
   #' @param excludeIncomplete Be careful using this argument! It can
@@ -176,9 +165,10 @@ subset_by_month <- function(x, months = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  xSubset <- subset_by(x, type = "month", exact = months,
+  xSubset <- subset_by(x, type = "month",
+                       exact = months,
                        before = before, after = after,
-                       between = between, except = except)
+                       except = except)
 
   # Remove any summers or years without all of the necessary months
   if (excludeIncomplete %in% 1:12) {
@@ -194,7 +184,7 @@ subset_by_month <- function(x, months = NULL,
 
 subset_by_day <- function(x, days = NULL,
                           before = NULL, after = NULL,
-                          between = NULL, except = NULL) {
+                          except = NULL) {
   #' Subset a SpatRaster based on the layers' day
   #'
   #' @description Easily select only the layers of a SpatRaster depending on
@@ -214,16 +204,17 @@ subset_by_day <- function(x, days = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  xSubset <- subset_by(x, type = "day", exact = minutes,
+  xSubset <- subset_by(x, type = "day",
+                       exact = minutes,
                        before = before, after = after,
-                       between = between, except = except)
+                       except = except)
   return(xSubset)
 }
 
 
 subset_by_hour <- function(x, hours = NULL,
                            before = NULL, after = NULL,
-                           between = NULL, except = NULL) {
+                           except = NULL) {
   #' Subset a SpatRaster based on the layers' hour
   #'
   #' @description Easily select only the layers of a SpatRaster depending on
@@ -239,15 +230,16 @@ subset_by_hour <- function(x, hours = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  xSubset <- subset_by(x, type = "hour", exact = hours,
+  xSubset <- subset_by(x, type = "hour",
+                       exact = hours,
                        before = before, after = after,
-                       between = between, except = except)
+                       except = except)
   return(xSubset)
 }
 
 subset_by_minute <- function(x, minutes = NULL,
                              before = NULL, after = NULL,
-                             between = NULL, except = NULL) {
+                             except = NULL) {
   #' Subset a SpatRaster based on the layers' minute
   #'
   #' @description Easily select only the layers of a SpatRaster depending on
@@ -264,13 +256,223 @@ subset_by_minute <- function(x, minutes = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  xSubset <- subset_by(x, type = "minute", exact = minutes,
+  xSubset <- subset_by(x, type = "minute",
+                       exact = minutes,
                        before = before, after = after,
-                       between = between, except = except)
+                       except = except)
   return(xSubset)
 }
 
 
-# subset_by_monthDay <- function(x,
-#                                monthsDays = NULL,
-#                                period)
+subset_by_date <- function(x, dates = NULL,
+                           periods = NULL,
+                           before = NULL,
+                           after = NULL,
+                           except = NULL) {
+  #' Subset a SpatRaster based on the layers' date
+  #'
+  #' @description Easily select only layers of a SpatRaster that are on specific
+  #'   dates. This function is distinct to `subset_by_day()` as it considers the
+  #'   full date, not just the day. It is usually easier (and quicker) to chain
+  #'   together the "subset_by_x" functions unless an unusual combination of
+  #'   dates is required. See the examples.
+  #'
+  #'   The dates can be input either as a vector of specific dates using the
+  #'   "dates" argument; or as a list of vectors containing the start and end
+  #'   dates for longer extended 'periods'. All dates need to be entered in
+  #'   YYYY-MM-DD format (e.g. "2019-12-31").
+  #'
+  #' @inheritParams subset_by
+  #' @param dates Used for specific dates. Input must be a vector of specific
+  #'   dates to return, each in the format "YYYY-MM-DD".
+  #'
+  #'   For example, c("2019-01-01", "2019-01-03", "2011-03-08") will return 3
+  #'   layers (3 layers assuming those dates are available in the dataset and
+  #'   each date only appears once; if not, all instances of a date will be
+  #'   returned; if no dates match, an empty SpatRaster is returned).
+  #' @param periods Used for extended periods rather than individual dates.
+  #'   Input dates must be a vector, with the first value indicating when the
+  #'   period begins and the second when the period ends. For multiple periods,
+  #'   use a list of such vectors, for example:
+  #'      ```
+  #'      list(c("2019-01-01", "2019-01-03"),     # 1-3  Jan 2019
+  #'           c("2011-03-08", "2011-03-11"))     # 8-11 Mar 2011
+  #'      ````
+  #'   The above will return the layers for 1st, 2nd and 3rd of January 2019,
+  #'   and the 8th, 9th, 10th and 11th of March 2011.
+  #' @param except Dates that should be removed from the 'x' SpatRaster. If a
+  #'   vector, all dates are treated individually; for extended periods, use a
+  #'   list of vectors as outlined in the 'periods' argument.
+  #'
+  #' @export
+
+  # Code -----------------------------------------------------------------------
+  # Guard: only one of the options can be used at once
+  check_if_null(dates, periods, before, after, except,
+                stopIfNoNull = TRUE, noNullMessage = "No dates selected!")
+
+  # Format the input as necessary - account for using periods / except arguments
+  if (!is.null(periods)) {
+    # Handle if a single vector was supplied
+    if (!is.list(periods)) periods <- list(periods)
+
+    # If using the periods argument
+    dates <- c() # preallocate
+
+    # extend date periods and add
+    for (ii in seq_along(periods)) {
+      iiDates <- as.Date(periods[[ii]][1]):as.Date(periods[[ii]][2])
+      dates   <- c(dates, iiDates)
+    }
+    dates <- as.Date(dates, "1970-01-01") |>
+      as.character()                           # format as string of dates
+  } else if (!is.null(except)) {
+    if (is.list(except)) {              # if a list, find the full periods
+      newExcept <- c() # preallocate
+
+      # extend date periods and add
+      for (ii in seq_along(except)) {
+        iiDates <- as.Date(except[[ii]][1]):as.Date(except[[ii]][2])
+        newExcept <- c(newExcept, iiDates)
+      }
+      except <- as.Date(newExcept, "1970-01-01") |>
+        as.character()
+    } # else it is a vector, and we want each date individually
+  }
+
+  # Retrieve correct data layers
+  xSubset <- subset_by(x = x, type = "date",
+                       exact = dates,
+                       before = before, after = after,
+                       except = except)
+  return(xSubset)
+}
+
+subset_by_monthDay <- function(x,
+                               monthDays = NULL,
+                               periods = NULL,
+                               excludeIncomplete = FALSE,
+                               before = NULL,
+                               after = NULL,
+                               except = NULL) {
+  #' Subset a SpatRaster based on the layers' month-day
+  #'
+  #' @description Easily select only layers of a SpatRaster that are on certain
+  #'   month-days (i.e. dates which ignore the year).
+  #'
+  #'   As an example, return only the layers that fall on the 1st, 2nd or 3rd of
+  #'   December for every year in the dataset.
+  #'
+  #' @inheritParams subset_by
+  #' @param monthDays Used for specific dates. A vector of monthDays, best
+  #'   formatted as "Jan-14" or "14-Jan". Fed directly into [handle_monthDays()]
+  #'   to identify and reformat the month-day for matching against the 'x'
+  #'   SpatRaster dates.
+  #'
+  #'   As an example, using a vector of `c("Jan-01", "7 Feb", "15/Mar)` will
+  #'   find any layers that occur on the 1st of January or the 7th of February
+  #'   or the 15th March in the 'x' dataset, regardless of the layers' year.
+  #'
+  #'   **Note:** Something like "01/02" will fail. It is ambiguous.
+  #' @param periods Used for extended periods rather than individual dates.
+  #'   Input dates must be a vector, with the first value indicating when the
+  #'   period begins and the second when the period ends. For multiple periods,
+  #'   use a list of such vectors, for example:
+  #'      ```
+  #'      list(c("Jan-01", "Jan-01"),     # 1-3  Jan of all years in x
+  #'           c("Mar-08", "Mar-11"))     # 8-11 Mar of all years in x
+  #'      ````
+  #'   The above will return the layers for 1st, 2nd and 3rd of January, and the
+  #'   8th, 9th, 10th and 11th of March, regardless of the year.
+  #' @param except Dates that should be removed from the 'x' SpatRaster. If a
+  #'   vector, all dates are treated individually; for extended periods, use a
+  #'   list of vectors as outlined in the 'periods' argument.
+  #'
+
+  # Code -----------------------------------------------------------------------
+  # Guard: only one of the options can be used at once
+  check_if_null(monthDays, periods, before, after, except,
+                stopIfNoNull = TRUE, noNullMessage = "No dates selected!")
+
+  # Handle different formats
+  if (!is.null(monthDays[1])) {
+    monthDays <- handle_monthDays(monthDays, out = "Jan-01")
+  } else if (!is.null(periods[1])) {
+    if (!is.list(periods)) {
+      periods <- list(periods)
+    }
+    periods <- lapply(periods,
+                      FUN = handle_monthDays,
+                      out = "Jan-01")
+    toPrepare <- periods
+  } else if (!is.null(before)) {
+    before <- handle_monthDays(before, out = "Jan-01")
+  } else if (!is.null(after)) {
+    after <- handle_monthDays(after, out = "Jan-01")
+  } else if (!is.null(except[1])) {
+    if (is.list(except)) {
+      except <- lapply(except,
+                       FUN = handle_monthDays,
+                       out = "Jan-01")
+      toPrepare <- except
+    } else {
+      except <- handle_monthDays(except)
+    }
+  }
+
+  # Handle if periods or except list were used as input
+  if (exists("toPrepare")) {
+    # Separate the start and end date
+    startEach <- sapply(toPrepare, "[[", 1)
+    endEach   <- sapply(toPrepare, "[[", 2)
+
+    # Do the dates cross the new year?
+    startMonth <- get_months(startEach, 1)
+    endMonth   <- get_months(endEach, 1)
+
+    # Create fake dates (i.e. add a year to the month and day)
+    # Allows start:end for the ranges
+    fakeStart  <- ifelse(test = endMonth < startMonth,
+                         yes  = "1979",
+                         no   = "1980") |>
+      paste(handle_monthDays(startEach, "mm-dd"), sep = "-")
+    fakeEnd    <- paste("1980", handle_monthDays(endEach, "mm-dd"), sep = "-")
+
+    # Get all dates in between the start and end dates (inclusive)
+    fakeDates  <- c() # preallocate
+    for (ii in seq_along(fakeStart)) {
+      iiDates   <- as.Date(fakeStart[ii]):as.Date(fakeEnd[ii])
+      fakeDates <- c(fakeDates, iiDates)
+    }
+
+    # Strip away the fake dates
+    if (!is.null(periods)) {
+      periods <- as.Date(fakeDates, "1970-01-01") |>
+        handle_monthDays(out = "Jan-01")
+      cat2(periods)
+    } else if (!is.null(except)) {
+      except <- as.Date(fakeDates, "1970-01-01") |>
+        handle_monthDays(out = "Jan-01")
+    }
+  }
+
+  # Retrieve the layers of interest
+  xSubset <- subset_by(x, type = "monthDay",
+                       exact = monthDays,
+                       before = before, after = after,
+                       except = except)
+
+  # Handle if removing
+  if (excludeIncomplete %in% 1:12) {
+    xSubset <- exclude_incomplete_summers(x = xSubset,
+                                          daily = TRUE,
+                                          australSplit = excludeIncomplete)
+    # If all of these dates don't appear in a summer, remove any that do.
+  } else if (isTRUE(excludeIncomplete)) {
+    xSubset <- exclude_incomplete_years(x = xSubset,
+                                        daily = TRUE)
+    # If all of these dates don't appear in a year, remove any that do.
+  }
+
+  return(xSubset)
+}
