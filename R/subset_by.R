@@ -1,6 +1,7 @@
 subset_by <- function(x, type, exact = NULL,
                       before = NULL, after = NULL,
-                      between = NULL, except = NULL, australSplit = 3) {
+                      between = NULL, except = NULL,
+                      australSplit = 3) {
   #' Subset a SpatRaster based on the layers' dates
   #'
   #' @description Easily select layers of a SpatRaster depending on their date
@@ -77,8 +78,10 @@ subset_by <- function(x, type, exact = NULL,
 
   # Subset the data
   xSubset <- terra::subset(x, xIndex)
-}
 
+  # Return the layers requested
+  return(xSubset)
+}
 
 subset_by_year <- function(x, years = NULL,
                            before = NULL, after = NULL,
@@ -97,15 +100,16 @@ subset_by_year <- function(x, years = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  x <- subset_by(x, type = "year", exact = years,
-                 before = before, after = after,
-                 between = between, except = except)
-  return(x)
+  xSubset <- subset_by(x, type = "year", exact = years,
+                       before = before, after = after,
+                       between = between, except = except)
+  return(xSubset)
 }
 
 subset_by_summer <- function(x, summers = NULL,
                              before = NULL, after = NULL,
-                             between = NULL, except = NULL) {
+                             between = NULL, except = NULL,
+                             australSplit = 3) {
   #' Subset a SpatRaster based on the layers' austral summer
   #'
   #' @description Easily select only the layers of a SpatRaster depending on
@@ -123,11 +127,99 @@ subset_by_summer <- function(x, summers = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  x <- subset_by(x, type = "summer", exact = summers,
-                 before = before, after = after,
-                 between = between, except = except)
-  return(x)
+  xSubset <- subset_by(x, type = "summer", exact = summers,
+                       before = before, after = after,
+                       between = between, except = except,
+                       australSplit = australSplit)
+  return(xSubset)
 }
+
+subset_by_month <- function(x, months = NULL,
+                            excludeIncomplete = FALSE,
+                            dailyResolution = FALSE,
+                            before = NULL, after = NULL,
+                            between = NULL, except = NULL) {
+  #' Subset a SpatRaster based on the layers' month
+  #'
+  #' @description Easily select only the layers of a SpatRaster depending on
+  #'   only the layers' month. For example, only data in June, or only data
+  #'   after October.
+  #'
+  #' @inheritParams subset_by
+  #' @param months Which month/s to return? Use this argument for exact matches
+  #'   (e.g. c(1:4, 8), otherwise leave this as NULL (the default) and use one
+  #'   of the other arguments. This argument is fed through [get_months()], so
+  #'   can be input either as )e.g.) 12, "12", "Dec", "dec", "December", or
+  #'   "december".
+  #'
+  #' @param excludeIncomplete Be careful using this argument! It can
+  #'   dramatically affect the output of this function. Please read the
+  #'   Explanation in [exclude_incomplete_years()] first.
+  #'
+  #'   If TRUE, the data is run through `exclude_incomplete_years()`, and
+  #'   only data from the years containing all requested months are returned.
+  #'
+  #'   If numeric (between 1 and 12), the data is run through
+  #'   [exclude_incomplete_summers], and the value is used as the 'australSplit'
+  #'   argument. This returns only data from the austral summers that contain
+  #'   all requested months.
+  #'
+  #'   If any other value (including the default FALSE), the
+  #'   `exclude_incomplete_x` functions are skipped, and all layers matching the
+  #'   'months' argument are returned, regardless of the summer or year in which
+  #'   they occur. See the examples.
+  #' @param dailyResolution BINARY: If using the 'excludeIncomplete' argument,
+  #'   it is necessary to define whether the data is at a daily or monthly
+  #'   resolution. See [exclude_incomplete_summers()] and
+  #'   [exclude_incomplete_years()] for more information.
+  #'
+  #' @export
+
+  # Code -----------------------------------------------------------------------
+  xSubset <- subset_by(x, type = "month", exact = months,
+                       before = before, after = after,
+                       between = between, except = except)
+
+  # Remove any summers or years without all of the necessary months
+  if (excludeIncomplete %in% 1:12) {
+    xSubset <- exclude_incomplete_summers(xSubset,
+                                          daily = dailyResolution,
+                                          australSplit = excludeIncomplete)
+  } else if (isTRUE(excludeIncomplete)) {#} == "years") {
+    xSubset <- exclude_incomplete_years(xSubset, daily = dailyResolution)
+  }
+
+  return(xSubset)
+}
+
+subset_by_day <- function(x, days = NULL,
+                          before = NULL, after = NULL,
+                          between = NULL, except = NULL) {
+  #' Subset a SpatRaster based on the layers' day
+  #'
+  #' @description Easily select only the layers of a SpatRaster depending on
+  #'   only the layers' day. For example, only data on the 1st of a month (1),
+  #'   or only data between the 10th and 15th of a month (10:15).
+  #'
+  #'   This function is distinct to `subset_by_date()` because it subsets
+  #'   using *only* the day part of the date: there is no accounting for the
+  #'   month or year. This approach can be useful to select the first day of
+  #'   each month for example.
+  #'
+  #' @inheritParams subset_by
+  #' @param days Which day/s to return? Use this argument for exact matches
+  #'   (e.g. c(1, 8, 15)), otherwise leave this as NULL (the default) and use
+  #'   one of the other arguments.
+  #'
+  #' @export
+
+  # Code -----------------------------------------------------------------------
+  xSubset <- subset_by(x, type = "day", exact = minutes,
+                       before = before, after = after,
+                       between = between, except = except)
+  return(xSubset)
+}
+
 
 subset_by_hour <- function(x, hours = NULL,
                            before = NULL, after = NULL,
@@ -142,15 +234,15 @@ subset_by_hour <- function(x, hours = NULL,
   #' @inheritParams subset_by
   #' @param hours Which hour/s to return? Use this argument for exact matches
   #'   (e.g. c(12:17, 21-22)), otherwise leave this as NULL (the default) and
-  #'   use one of the other arguments.
+  #'   use one of the other arguments. Must be in the 24-hour format.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
-  x <- subset_by(x, type = "hour", exact = hours,
-                 before = before, after = after,
-                 between = between, except = except)
-  return(x)
+  xSubset <- subset_by(x, type = "hour", exact = hours,
+                       before = before, after = after,
+                       between = between, except = except)
+  return(xSubset)
 }
 
 subset_by_minute <- function(x, minutes = NULL,
@@ -172,8 +264,13 @@ subset_by_minute <- function(x, minutes = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  x <- subset_by(x, type = "minute", exact = minutes,
-                 before = before, after = after,
-                 between = between, except = except)
-  return(x)
+  xSubset <- subset_by(x, type = "minute", exact = minutes,
+                       before = before, after = after,
+                       between = between, except = except)
+  return(xSubset)
 }
+
+
+# subset_by_monthDay <- function(x,
+#                                monthsDays = NULL,
+#                                period)
