@@ -1,39 +1,28 @@
-subset_by_summer <- function(x, summers,
+subset_by_summer <- function(x, summers = NULL,
+                             before = NULL, after = NULL,
+                             except = NULL,
                              australSplit = 3) {
-  #' Subset a SpatRaster based on the layers' summer
+  #' Subset a SpatRaster based on the layers' austral summer
   #'
-  #' @description Easily select only layers of a SpatRaster that are in a
-  #'   certain austral summer (e.g. Summer 1991 is 1990/1991). See the
-  #'   australSplit argument for defining which months are considered in which
-  #'   austral summer.
+  #' @description Easily select only the layers of a SpatRaster depending on
+  #'   only the layers' summer. For example, only data in the summer of 1991/92
+  #'   (indicated by 1992), or only data after summer 2000.
   #'
-  #' @param x SpatRaster: The data to subset. Can be either a string, in which
-  #'   case it is interpreted as a filePath and read in, or an existing
-  #'   SpatRaster.
-  #' @param summers vector: Which summer/s to return?
-  #' @param australSplit numeric: Which is the last month included in an austral
-  #'   summer before the new austral year begins? The default value is 3, which
-  #'   means that all months *AFTER* March are considered as part of the
-  #'   following summer (i.e. April 1991 -- March 1992 are all in 1992). Swap
-  #'   this value according: setting it as 4 means May 1991 -- April 1992 are
-  #'   all 1992.
+  #'   See the australSplit argument for defining which months are considered in
+  #'   which austral summer.
+  #'
+  #' @inheritParams subset_by
+  #' @param summers Which summer/s to return? Use this argument for exact
+  #'   matches (e.g. c(1980:1990, 1995:1997), otherwise leave this as NULL (the
+  #'   default) and use one of the other arguments.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Handle if x is a filename
-  if ("SpatRaster" %notIn% methods::is(x)) {
-    x <- terra::rast(x)
-  }
-
-  # Get dates of each layer
-  xDates <- get_terra_dates(x, australSplit = australSplit)
-
-  # Identify relevant layers
-  summerIndex <- which(xDates$summer %in% summers)
-
-  # Subset the data
-  xSubset <- terra::subset(x, summerIndex)
-
+  xSubset <- subset_by(x, type = "summer",
+                       exact = summers,
+                       before = before, after = after,
+                       except = except,
+                       australSplit = australSplit)
   return(xSubset)
 }

@@ -10,7 +10,6 @@ subset_by(
   exact = NULL,
   before = NULL,
   after = NULL,
-  between = NULL,
   except = NULL,
   australSplit = 3
 )
@@ -32,16 +31,13 @@ Options are (example using a date of 2019-11-29 and time of 12:30):
 }}
 
 \item{exact}{vector: Values that the 'type' value must match exactly. Only
-one of these 5 arguments can be used at once.}
+one of the criteria arguments can be used at once.}
 
 \item{before}{numeric: The maximum value that the 'type' value can have.
-Only one of these 5 arguments can be used at once.}
+Only one of the criteria arguments can be used at once.}
 
 \item{after}{numeric: The minimum value that the 'type' value can have.
-Only one of these 5 arguments can be used at once.}
-
-\item{between}{vector: The minimum and maximum values that the 'type' value
-can have; inclusive.}
+Only one of the criteria arguments can be used at once.}
 
 \item{except}{vector: Values that the 'type' value cannot match.}
 

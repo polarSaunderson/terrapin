@@ -7,18 +7,21 @@
 subset_by_monthDay(
   x,
   monthDays = NULL,
-  monthDayList = NULL,
-  excludeIncomplete = FALSE
+  periods = NULL,
+  excludeIncomplete = FALSE,
+  before = NULL,
+  after = NULL,
+  except = NULL
 )
 }
 \arguments{
-\item{x}{SpatRaster: The data to subset. Can be either a string, in which
-case it is interpreted as a filePath and read in, or an existing
-SpatRaster.}
+\item{x}{SpatRaster: The data to subset. It can be either a string, in
+which case it is interpreted as a filepath and read in using
+\code{\link[terra:rast]{terra::rast()}}; or an existing SpatRaster.}
 
 \item{monthDays}{Used for specific dates. A vector of monthDays, best
 formatted as "Jan-14" or "14-Jan". Fed directly into \code{\link[=handle_monthDays]{handle_monthDays()}}
-to identify and reformat the month-day for matching against the
+to identify and reformat the month-day for matching against the 'x'
 SpatRaster dates.
 
 As an example, using a vector of \verb{c("Jan-01", "7 Feb", "15/Mar)} will
@@ -27,35 +30,30 @@ or the 15th March in the 'x' dataset, regardless of the layers' year.
 
 \strong{Note:} Something like "01/02" will fail. It is ambiguous.}
 
-\item{monthDayList}{Used for extended periods of dates. Input must be a
-list of vectors, with the first value in each vector indicating when the
-period begins, and the second when the period ends.
+\item{periods}{Used for extended periods rather than individual dates.
+Input dates must be a vector, with the first value indicating when the
+period begins and the second when the period ends. For multiple periods,
+use a list of such vectors, for example:
+```
+list(c("Jan-01", "Jan-01"),     # 1-3  Jan of all years in x
+c("Mar-08", "Mar-11"))     # 8-11 Mar of all years in x
+````
+The above will return the layers for 1st, 2nd and 3rd of January, and the
+8th, 9th, 10th and 11th of March, regardless of the year.}
 
-For example, \code{list(c("Jan-02", "Jan-04"), c("Feb-07", "Feb-09"))} will
-return all layers that occur on the 2nd, 3rd or 4th January, or on the
-7th, 8th or 9th of February in the dataset, regardless of the layers'
-year.}
+\item{before}{numeric: The maximum value that the 'type' value can have.
+Only one of the criteria arguments can be used at once.}
 
-\item{excludeIncomplete}{Be careful using this argument! It can
-dramatically affect the output of this function. Please read the
-Explanation in \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}} first.
+\item{after}{numeric: The minimum value that the 'type' value can have.
+Only one of the criteria arguments can be used at once.}
 
-If TRUE, the data is run through \code{exclude_incomplete_years()}, and only
-months in years with all requested months in are returned.
-
-If numeric (between 1 and 12), the data is fed into
-\code{exclude_incomplete_summers()} and the value is used as the
-'australSplit' argument to return only months in austral summers that
-contain all requested months.
-
-If any other value (including the default FALSE), the
-\code{exclude_incomplete_x} functions are skipped, and all layers matching the
-'months' argument are returned, regardless of the summer or year in which
-they occur. See the examples.}
+\item{except}{Dates that should be removed from the 'x' SpatRaster. If a
+vector, all dates are treated individually; for extended periods, use a
+list of vectors as outlined in the 'periods' argument.}
 }
 \description{
 Easily select only layers of a SpatRaster that are on certain
-month-days (i.e. dates ignoring the year).
+month-days (i.e. dates which ignore the year).
 
 As an example, return only the layers that fall on the 1st, 2nd or 3rd of
 December for every year in the dataset.

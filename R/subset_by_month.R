@@ -1,28 +1,32 @@
-subset_by_month <- function(x, months,
+subset_by_month <- function(x, months = NULL,
                             excludeIncomplete = FALSE,
-                            dailyResolution = FALSE) {
+                            dailyResolution = FALSE,
+                            before = NULL, after = NULL,
+                            except = NULL) {
   #' Subset a SpatRaster based on the layers' month
   #'
-  #' @description Easily select only layers of a SpatRaster that are in a
-  #'   certain month/s (e.g. only layers that are in December).
+  #' @description Easily select only the layers of a SpatRaster depending on
+  #'   only the layers' month. For example, only data in June, or only data
+  #'   after October.
   #'
-  #' @param x SpatRaster: The data to subset. Can be either a string, in which
-  #'   case it is interpreted as a filePath and read in, or an existing
-  #'   SpatRaster.
-  #' @param months vector: Which month/s to return? Input is fed directly into
-  #'   [get_months()] to handle different formats, but either 12, "12", "Dec",
-  #'   "December", "dec", or "december" should work.
+  #' @inheritParams subset_by
+  #' @param months Which month/s to return? Use this argument for exact matches
+  #'   (e.g. c(1:4, 8), otherwise leave this as NULL (the default) and use one
+  #'   of the other arguments. This argument is fed through [get_months()], so
+  #'   can be input either as (e.g.) 12, "12", "Dec", "dec", "December", or
+  #'   "december".
+  #'
   #' @param excludeIncomplete Be careful using this argument! It can
   #'   dramatically affect the output of this function. Please read the
   #'   Explanation in [exclude_incomplete_years()] first.
   #'
-  #'   If TRUE, the data is run through `exclude_incomplete_years()`, and only
-  #'   months in years with all requested months in are returned.
+  #'   If TRUE, the data is run through `exclude_incomplete_years()`, and
+  #'   only data from the years containing all requested months are returned.
   #'
-  #'   If numeric (between 1 and 12), the data is fed into
-  #'   `exclude_incomplete_summers()` and the value is used as the
-  #'   'australSplit' argument to return only months in austral summers that
-  #'   contain all requested months.
+  #'   If numeric (between 1 and 12), the data is run through
+  #'   [exclude_incomplete_summers], and the value is used as the 'australSplit'
+  #'   argument. This returns only data from the austral summers that contain
+  #'   all requested months.
   #'
   #'   If any other value (including the default FALSE), the
   #'   `exclude_incomplete_x` functions are skipped, and all layers matching the
@@ -36,24 +40,10 @@ subset_by_month <- function(x, months,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Handle different monthly inputs; uses `retrieve_months` rather than just
-  # `handle_months` so that full dates can be entered.
-  months <- get_months(x = months, out = 1, throwError = TRUE)
-
-  # Handle if x is a filename
-  if ("SpatRaster" %notIn% methods::is(x)) {
-    x <- terra::rast(x)
-  }
-
-  # Handling Dates -------------------------------------------------------------
-  # Get dates of each layer
-  xDates <- get_terra_dates(x, australSplit = excludeIncomplete)
-
-  # Identify relevant layers
-  monthlyIndex <- which(xDates$month %in% months)
-
-  # Subset the data
-  xSubset <- terra::subset(x, monthlyIndex)
+  xSubset <- subset_by(x, type = "month",
+                       exact = months,
+                       before = before, after = after,
+                       except = except)
 
   # Remove any summers or years without all of the necessary months
   if (excludeIncomplete %in% 1:12) {
@@ -66,3 +56,7 @@ subset_by_month <- function(x, months,
 
   return(xSubset)
 }
+
+
+
+

@@ -1,6 +1,9 @@
-subset_by_date <- function(x,
-                           dates = NULL,
-                           periods = NULL) {
+
+subset_by_date <- function(x, dates = NULL,
+                           periods = NULL,
+                           before = NULL,
+                           after = NULL,
+                           except = NULL) {
   #' Subset a SpatRaster based on the layers' date
   #'
   #' @description Easily select only layers of a SpatRaster that are on specific
@@ -14,9 +17,7 @@ subset_by_date <- function(x,
   #'   dates for longer extended 'periods'. All dates need to be entered in
   #'   YYYY-MM-DD format (e.g. "2019-12-31").
   #'
-  #' @param x SpatRaster: The data to subset. Can be either a string, in which
-  #'   case it is interpreted as a filePath and read in, or an existing
-  #'   SpatRaster.
+  #' @inheritParams subset_by
   #' @param dates Used for specific dates. Input must be a vector of specific
   #'   dates to return, each in the format "YYYY-MM-DD".
   #'
@@ -24,7 +25,6 @@ subset_by_date <- function(x,
   #'   layers (3 layers assuming those dates are available in the dataset and
   #'   each date only appears once; if not, all instances of a date will be
   #'   returned; if no dates match, an empty SpatRaster is returned).
-  #'
   #' @param periods Used for extended periods rather than individual dates.
   #'   Input dates must be a vector, with the first value indicating when the
   #'   period begins and the second when the period ends. For multiple periods,
@@ -35,38 +35,18 @@ subset_by_date <- function(x,
   #'      ````
   #'   The above will return the layers for 1st, 2nd and 3rd of January 2019,
   #'   and the 8th, 9th, 10th and 11th of March 2011.
-  #'
-  #' @examples
-  #' \dontrun{
-  #'   x <- terra::rast("fileName.nc")
-  #'
-  #'   # For specific dates, use the "dates" argument:
-  #'   xSubset1 <- subset_by_date(x, dates = c("1991-12-01", "1994-12-19",
-  #'                                           "2003-04-17", "2012-09-22"))
-  #'
-  #'   # For extended periods, use the "periods" argument:
-  #'   xSubset2 <- subset_by_date(x, periods = list(c("1991-12-01", "1991-12-05"),
-  #'                                                c("1993-11-15", "1993-12-15")))
-  #'
-  #'   # However, it can be easier to chain other "subset_by_x" functions.
-  #'   # The following two are equivalent.
-  #'   xSubset3 <- subset_by_year(x, 1991) |> subset_by_month(12)
-  #'
-  #'   xSubset4 <- subset_by_date(x, periods = c("1991-12-01", "1991-12-31"))
-  #' }
+  #' @param except Dates that should be removed from the 'x' SpatRaster. If a
+  #'   vector, all dates are treated individually; for extended periods, use a
+  #'   list of vectors as outlined in the 'periods' argument.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Check that dates have been requested!
-  if (is.null(dates[1]) & is.null(periods[1])) {
-    stop("No dates selected!")
-  }
-  if (!is.null(dates[1]) & !is.null(periods[1])) {
-    stop("Please use either the dates or periods argument, not both.")
-  }
+  # Guard: only one of the options can be used at once
+  check_if_null(dates, periods, before, after, except,
+                stopIfNoNull = TRUE, noNullMessage = "No dates selected!")
 
-  # Format the dates as necessary - account for using dates or periods argument
+  # Format the input as necessary - account for using periods / except arguments
   if (!is.null(periods)) {
     # Handle if a single vector was supplied
     if (!is.list(periods)) periods <- list(periods)
@@ -81,21 +61,24 @@ subset_by_date <- function(x,
     }
     dates <- as.Date(dates, "1970-01-01") |>
       as.character()                           # format as string of dates
+  } else if (!is.null(except)) {
+    if (is.list(except)) {              # if a list, find the full periods
+      newExcept <- c() # preallocate
+
+      # extend date periods and add
+      for (ii in seq_along(except)) {
+        iiDates <- as.Date(except[[ii]][1]):as.Date(except[[ii]][2])
+        newExcept <- c(newExcept, iiDates)
+      }
+      except <- as.Date(newExcept, "1970-01-01") |>
+        as.character()
+    } # else it is a vector, and we want each date individually
   }
 
-  xSubset <- subset_by(x, type = "date", )
-
-  # Handle if x is a filename
-  x <- terra::rast(x, keeptime = TRUE, keepunits = TRUE, props = TRUE)
-
-  # Get all dates of the input
-  xDates <- get_terra_dates(x, australSplit = NULL)
-
-  # Which rows of the xDates date match our requested dates?
-  dateIndex <- which(xDates$date %in% dates)
-
-  # Subset
-  xSubset <- terra::subset(x, dateIndex)
-
+  # Retrieve correct data layers
+  xSubset <- subset_by(x = x, type = "date",
+                       exact = dates,
+                       before = before, after = after,
+                       except = except)
   return(xSubset)
 }
