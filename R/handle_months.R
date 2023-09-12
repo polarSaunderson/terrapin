@@ -37,6 +37,10 @@ handle_months <- function(x, out = 1) {
   #' @export
 
   # Code -----------------------------------------------------------------------
+  # Guard against NULL / NA / NaN
+  if (is.null(x[1])) return(NULL)
+  if (is.na(x[1]) | is.nan(x[1])) return(NA)
+
   # Account for different inputs
   x <- as.character(x)  # treat numbers as strings so we just deal with strings
   xlower <- tolower(x)  # for comparisons, leaving x separate for "asis" option

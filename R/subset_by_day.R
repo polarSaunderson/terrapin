@@ -21,7 +21,7 @@ subset_by_day <- function(x, days = NULL,
 
   # Code -----------------------------------------------------------------------
   xSubset <- subset_by(x, type = "day",
-                       exact = minutes,
+                       exact = days,
                        before = before, after = after,
                        except = except)
   return(xSubset)

@@ -56,11 +56,16 @@ subset_by_date <- function(x, dates = NULL,
 
     # extend date periods and add
     for (ii in seq_along(periods)) {
-      iiDates <- as.Date(periods[[ii]][1]):as.Date(periods[[ii]][2])
-      dates   <- c(dates, iiDates)
+      periodStart <- handle_dates(periods[[ii]][1], out = "YYYY-MM-DD")
+      periodEnd   <- handle_dates(periods[[ii]][2], out = "YYYY-MM-DD")
+      iiDates     <- as.Date(periodStart):as.Date(periodEnd)
+      dates       <- c(dates, iiDates)
     }
-    dates <- as.Date(dates, "1970-01-01") |>
-      as.character()                           # format as string of dates
+
+    # Format as string of dates
+    dates <- as.Date(dates, "1970-01-01") |> as.character()
+    periods <- NULL   # NULL is ready for subset_by, as only 1 non-null allowed
+
   } else if (!is.null(except)) {
     if (is.list(except)) {              # if a list, find the full periods
       newExcept <- c() # preallocate
@@ -81,5 +86,6 @@ subset_by_date <- function(x, dates = NULL,
                        before = handle_dates(before),
                        after  = handle_dates(after),
                        except = handle_dates(except))
+
   return(xSubset)
 }

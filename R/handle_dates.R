@@ -33,8 +33,6 @@ handle_dates <- function(x, out = "YYYY-MM-DD", outSep = "-") {
   handle_dates_internal <- function(x, out, outSep) {
     # Guard 1: Date must have three parts
     x <- unlist(x)
-    if (is.na(x[1]) | is.nan(x[1])) return(NA)
-    if (is.null(x[1])) return(NULL)
     if (length(x) != 3) stop("Incorrect date format entered.")
 
     # Guard 2: One part must have four characters for the year
@@ -82,6 +80,9 @@ handle_dates <- function(x, out = "YYYY-MM-DD", outSep = "-") {
 
     return(y)
   }
+  # Guard against NULL / NA / NaN
+  if (is.null(x[1])) return(NULL)
+  if (is.na(x[1]) | is.nan(x[1])) return(NA)
 
   # Handle if date contains " ", "/", or "-" separations
   x <- gsub(pattern = "/", replacement = "-", x = x) |>

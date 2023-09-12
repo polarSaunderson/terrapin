@@ -136,6 +136,10 @@ handle_monthDays <- function(x, out = "Jan-01", outSep = "-") {
     return(x)
   }
 
+  # Guard against NULL / NA / NaN ----------------------------------------------
+  if (is.null(x[1])) return(NULL)
+  if (is.na(x[1]) | is.nan(x[1])) return(NA)
+
   # Prepare for different output options ---------------------------------------
   md  <- switch(tolower(out),
                 "mm-dd" = , "m-d" = , "mmdd" = , "md" = , "jan-1" = , "jan-01" = TRUE,

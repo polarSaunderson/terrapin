@@ -38,6 +38,7 @@ subset_by_monthDay <- function(x,
   #'   vector, all dates are treated individually; for extended periods, use a
   #'   list of vectors as outlined in the 'periods' argument.
   #'
+  #' @export
 
   # Code -----------------------------------------------------------------------
   # Guard: only one of the options can be used at once
@@ -97,20 +98,38 @@ subset_by_monthDay <- function(x,
 
     # Strip away the fake dates
     if (!is.null(periods)) {
-      periods <- as.Date(fakeDates, "1970-01-01") |>
+      monthDays <- as.Date(fakeDates, "1970-01-01") |>
         handle_monthDays(out = "Jan-01")
-      cat2(periods)
+      periods <- NULL
     } else if (!is.null(except)) {
       except <- as.Date(fakeDates, "1970-01-01") |>
         handle_monthDays(out = "Jan-01")
     }
   }
 
-  # Retrieve the layers of interest
-  xSubset <- subset_by(x, type = "monthDay",
-                       exact = monthDays,
-                       before = before, after = after,
-                       except = except)
+  # The monthDay doesn't work for > or < in format used in subset_by
+  if (!is.null(before) | !is.null(after)) {
+    # Handle if x is a filename
+    x <- terra::rast(x, keeptime = TRUE, keepunits = TRUE, props = TRUE)
+
+    xDates <- get_date_info(x)
+    xMDays <- handle_monthDays(xDates$monthDay, out = "mm-dd")
+    if (!is.null(before)) {
+      before <- handle_monthDays(before, out = "mm-dd")
+      xIndex <- which(xMDays < before)
+    } else if (!is.null(after)) {
+      after  <- handle_monthDays(after, out = "mm-dd")
+      xIndex <- which(xMDays > after)
+    }
+    # Retrieve the layers of interest
+    xSubset <- terra::subset(x, xIndex)
+  } else {
+    # Retrieve the layers of interest
+    xSubset <- subset_by(x, type = "monthDay",
+                         exact = monthDays,
+                         before = before, after = after,
+                         except = except)
+  }
 
   # Handle if removing
   if (excludeIncomplete %in% 1:12) {

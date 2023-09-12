@@ -58,8 +58,6 @@ subset_by <- function(x, type, exact = NULL,
     xIndex <- which(xDates[[type]] < before)
   } else if (!is.null(after)) {
     xIndex <- which(xDates[[type]] > after)
-  } else if (!is.null(between[1])) {
-    xIndex <- which(xDates[[type]] >= between[1] & xDates[[type]] <= between[2])
   } else if (!is.null(except)) {
     xIndex <- which(xDates[[type]] %notIn% except)
   }
