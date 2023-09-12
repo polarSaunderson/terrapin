@@ -54,7 +54,7 @@ correlate_by_cell <- function(xy, detrend, method = "pearson") {
     }
 
     # Correlate & return
-    kaw <- stats::cor.test(xx, yy, method) |>
+    kaw <- stats::cor.test(xx, yy, method = method) |>
       suppressWarnings()                  # if standard deviation is 0
     return(c(kaw$estimate, kaw$p.value))
   }
