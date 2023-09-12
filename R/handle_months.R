@@ -7,13 +7,13 @@ handle_months <- function(x, out = 1) {
   #'   common input formats for months, and returns them in a specified format.
   #'   See the "Accepted Formats" section below.
   #'
-  #' @param x A vector of months in any of the above formats. If values don't
-  #'   correspond to these formats, the value is silently returned as it was
-  #'   input (no warning!).
-  #' @param out How should the months be returned? Choose from any of the above
-  #'   formats. If any other values are used, the numeric representation of the
-  #'   month is used (e.g. 1 for January) or the input x, if it didn't
-  #'   correspond to a valid month.
+  #' @param x A vector of months in any of the formats shown in the "Accepted
+  #'   Formats" section. If values don't correspond to these formats, the value
+  #'   is silently returned as it was input (no warning!).
+  #' @param out How should the months be returned? Choose from the options in
+  #'   the "Accepted Formats" section. If any other values are used, the numeric
+  #'   representation of the month is used (e.g. 1 for January) or the input x
+  #'   is just returned if it didn't correspond to a valid month.
   #'
   #' @details # Accepted Formats
   #'
@@ -39,54 +39,53 @@ handle_months <- function(x, out = 1) {
   # Code -----------------------------------------------------------------------
   # Account for different inputs
   x <- as.character(x)  # treat numbers as strings so we just deal with strings
-  xlower <- tolower(x)  # for comparisons & leaves x separate for "asis" option
+  xlower <- tolower(x)  # for comparisons, leaving x separate for "asis" option
 
   # Super fun nested ifelse
   y <- ifelse(test = xlower %in% c("01", "1", "jan", "january"),
-             yes  = 1,
-             no   = ifelse(
-               test = xlower %in% c("02", "2", "feb", "february"),
-               yes  = 2,
-               no   = ifelse(
-                 test = xlower %in% c("03", "3", "mar", "march"),
-                 yes  = 3,
-                 no   = ifelse(
-                   test = xlower %in% c("04", "1", "apr", "april"),
-                   yes  = 4,
-                   no   = ifelse(
-                     test = xlower %in% c("05", "1", "may"),
-                     yes  = 5,
-                     no   = ifelse(
-                       test = xlower %in% c("06", "6", "jun", "june"),
-                       yes  = 6,
-                       no   = ifelse(
-                         test = xlower %in% c("07", "7", "jul", "july"),
-                         yes  = 7,
-                         no   = ifelse(
-                           test = xlower %in% c("08", "8", "aug", "august"),
-                           yes  = 8,
-                           no   = ifelse(
-                             test = xlower %in% c("09", "9", "sep", "september"),
-                             yes  = 9,
-                             no   = ifelse(
-                               test = xlower %in% c("10", "oct", "october"),
-                               yes  = 10,
-                               no   = ifelse(
-                                 test = xlower %in% c("11", "nov", "november"),
-                                 yes  = 11,
-                                 no   = ifelse(
-                                   test = xlower %in% c("12", "dec", "december"),
-                                   yes  = 12,
-                                   no   = x)))))))))))) |> as.numeric()
+              yes  = 1,
+              no   = ifelse(
+                test = xlower %in% c("02", "2", "feb", "february"),
+                yes  = 2,
+                no   = ifelse(
+                  test = xlower %in% c("03", "3", "mar", "march"),
+                  yes  = 3,
+                  no   = ifelse(
+                    test = xlower %in% c("04", "1", "apr", "april"),
+                    yes  = 4,
+                    no   = ifelse(
+                      test = xlower %in% c("05", "1", "may"),
+                      yes  = 5,
+                      no   = ifelse(
+                        test = xlower %in% c("06", "6", "jun", "june"),
+                        yes  = 6,
+                        no   = ifelse(
+                          test = xlower %in% c("07", "7", "jul", "july"),
+                          yes  = 7,
+                          no   = ifelse(
+                            test = xlower %in% c("08", "8", "aug", "august"),
+                            yes  = 8,
+                            no   = ifelse(
+                              test = xlower %in% c("09", "9", "sep", "september"),
+                              yes  = 9,
+                              no   = ifelse(
+                                test = xlower %in% c("10", "oct", "october"),
+                                yes  = 10,
+                                no   = ifelse(
+                                  test = xlower %in% c("11", "nov", "november"),
+                                  yes  = 11,
+                                  no   = ifelse(
+                                    test = xlower %in% c("12", "dec", "december"),
+                                    yes  = 12,
+                                    no   = x)))))))))))) |> as.numeric()
 
   # Create output.
-  # Valid strings: 01, 1, Jan, jan, January, january
-  #                       Mon, mon, Month,   month
   # Valid numeric: 1
-
   if (is.numeric(out)) return(y)        # just give the numbers back
 
   # Else we want a string
+  # Valid strings: 01, 1, Jan, jan, January, january
+  #                       Mon, mon, Month,   month
   z <- switch(out,
               "1"       = as.character(y),
               "01"      = sprintf("%02d", as.numeric(y)),

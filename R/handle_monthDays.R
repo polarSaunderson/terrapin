@@ -47,7 +47,7 @@ handle_monthDays <- function(x, out = "Jan-01", outSep = "-") {
   #'   The divider can be set using the 'outSep' argument.
   #'
   #' @param outSep Which symbol should be placed between the date and month?
-  #'   Default is "-", but will accept any string.
+  #'   Default is "-", but will accept any reasonable string.
   #'
   #' @export
 

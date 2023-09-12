@@ -9,10 +9,10 @@ get_months(x, out = "Jan", throwError = TRUE)
 \arguments{
 \item{x}{A vector of dates in any of the accepted formats.}
 
-\item{out}{How should the months be returned? Choose from any of the above
-formats. If any other values are used, the numeric representation of the
-month is used (e.g. 1 for January) or the input x, if it didn't
-correspond to a valid month.}
+\item{out}{How should the months be returned? Choose from the options in
+the "Accepted Formats" section. If any other values are used, the numeric
+representation of the month is used (e.g. 1 for January) or the input x
+is just returned if it didn't correspond to a valid month.}
 
 \item{throwError}{If the input format isn't valid, should an error be
 thrown? TRUE by default. If FALSE, a warning is shown, and the input

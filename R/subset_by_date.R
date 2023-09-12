@@ -77,8 +77,9 @@ subset_by_date <- function(x, dates = NULL,
 
   # Retrieve correct data layers
   xSubset <- subset_by(x = x, type = "date",
-                       exact = dates,
-                       before = before, after = after,
-                       except = except)
+                       exact  = handle_dates(dates),
+                       before = handle_dates(before),
+                       after  = handle_dates(after),
+                       except = handle_dates(except))
   return(xSubset)
 }
