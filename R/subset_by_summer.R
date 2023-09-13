@@ -1,5 +1,7 @@
-subset_by_summer <- function(x, summers = NULL,
-                             before = NULL, after = NULL,
+subset_by_summer <- function(x,
+                             summers = NULL,
+                             before = NULL,
+                             after = NULL,
                              except = NULL,
                              australSplit = 3) {
   #' Subset a SpatRaster based on the layers' austral summer

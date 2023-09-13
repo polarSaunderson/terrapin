@@ -14,9 +14,9 @@ subset_by_month <- function(x, months = NULL,
   #'   (e.g. c(1:4, 8). Cannot be used in conjunction with the 'before', 'after',
   #'   or 'except' arguments.
   #'
-  #'   **Note:** This argument is fed through [get_months()], so this argument
-  #'   can be input in different formats. For example, December can be input as:
-  #'   12, "12", "Dec", "dec", "December", or "december".
+  #'   **Note:** This argument is fed through [terrapin::get_months()], so this
+  #'   argument can be input in different formats. For example, December can be
+  #'   input as any of: 12, "12", "Dec", "dec", "December", or "december".
   #'
   #' @param excludeIncomplete Be careful using this argument! It can
   #'   dramatically affect the output of this function. Please read the
