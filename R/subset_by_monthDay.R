@@ -14,27 +14,38 @@ subset_by_monthDay <- function(x,
   #'   December for every year in the dataset.
   #'
   #' @inheritParams subset_by
-  #' @param monthDays Used for specific dates. A vector of monthDays, best
-  #'   formatted as "Jan-14" or "14-Jan". Fed directly into [handle_monthDays()]
-  #'   to identify and reformat the month-day for matching against the 'x'
-  #'   SpatRaster dates.
+  #' @param monthDays Which monthDay/s to return?  Used for specific monthDays.
+  #'   Cannot be used in conjunction with the 'periods' argument.
+  #'
+  #'   Input must be a vector of specific monthDay/s, best formatted as "Jan-14"
+  #'   or "14-Jan". The month must be explicit.
   #'
   #'   As an example, using a vector of `c("Jan-01", "7 Feb", "15/Mar)` will
   #'   find any layers that occur on the 1st of January or the 7th of February
-  #'   or the 15th March in the 'x' dataset, regardless of the layers' year.
+  #'   or the 15th March in the input SpatRaster, regardless of the layers'
+  #'   year.
   #'
-  #'   **Note:** Something like "01/02" will fail. It is ambiguous.
-  #' @param periods Used for extended periods rather than individual dates.
+  #'   **Note:** Something like "01/02" will fail. It is ambiguous. This
+  #'   argument is fed directly into [terrapin::handle_monthDays()] to identify
+  #'   and reformat the month-day, so see that function for details on accepted
+  #'   inputs.
+  #'
+  #' @param periods Which monthDay/s to return? Used for extended periods rather
+  #'   than individual monthDays. Cannot be used in conjunction with the
+  #'   'monthDays' argument.
+  #'
   #'   Input dates must be a vector, with the first value indicating when the
-  #'   period begins and the second when the period ends. For multiple periods,
-  #'   use a list of such vectors, for example:
-  #'      ```
-  #'      list(c("Jan-01", "Jan-01"),     # 1-3  Jan of all years in x
-  #'           c("Mar-08", "Mar-11"))     # 8-11 Mar of all years in x
-  #'      ````
-  #'   The above will return the layers for 1st, 2nd and 3rd of January, and the
+  #'   period begins and the second when the period ends.
+  #'
+  #'   For multiple periods, use a list of such vectors, for example:
+  #'   ```
+  #'   list(c("Jan-01", "Jan-01"),   # 1-3  Jan for every year in the SpatRaster
+  #'        c("Mar-08", "Mar-11"))   # 8-11 Mar for every year in the SpatRaster
+  #'   ```
+  #'   The above will return data from the 1st, 2nd and 3rd of January, and the
   #'   8th, 9th, 10th and 11th of March, regardless of the year.
-  #' @param except Dates that should be removed from the 'x' SpatRaster. If a
+  #'
+  #' @param except Which monthDay/s should be excluded from the SpatRaster? If a
   #'   vector, all dates are treated individually; for extended periods, use a
   #'   list of vectors as outlined in the 'periods' argument.
   #'

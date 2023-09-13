@@ -11,10 +11,12 @@ subset_by_month <- function(x, months = NULL,
   #'
   #' @inheritParams subset_by
   #' @param months Which month/s to return? Use this argument for exact matches
-  #'   (e.g. c(1:4, 8), otherwise leave this as NULL (the default) and use one
-  #'   of the other arguments. This argument is fed through [get_months()], so
-  #'   can be input either as (e.g.) 12, "12", "Dec", "dec", "December", or
-  #'   "december".
+  #'   (e.g. c(1:4, 8). Cannot be used in conjunction with the 'before', 'after',
+  #'   or 'except' arguments.
+  #'
+  #'   **Note:** This argument is fed through [get_months()], so this argument
+  #'   can be input in different formats. For example, December can be input as:
+  #'   12, "12", "Dec", "dec", "December", or "december".
   #'
   #' @param excludeIncomplete Be careful using this argument! It can
   #'   dramatically affect the output of this function. Please read the

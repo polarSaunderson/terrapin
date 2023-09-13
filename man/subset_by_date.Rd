@@ -18,32 +18,44 @@ subset_by_date(
 which case it is interpreted as a filepath and read in using
 \code{\link[terra:rast]{terra::rast()}}; or an existing SpatRaster.}
 
-\item{dates}{Used for specific dates. Input must be a vector of specific
-dates to return, each in the format "YYYY-MM-DD".
+\item{dates}{Which date/s to return?  Used for specific dates Input must be
+a vector of specific dates to return, with the dates formatted as
+"YYYY-MM-DD", "YYYY-Jan-DD", "DD-MM-YYYY", or "DD-Jan-YYYY".
 
-For example, c("2019-01-01", "2019-01-03", "2011-03-08") will return 3
-layers (3 layers assuming those dates are available in the dataset and
-each date only appears once; if not, all instances of a date will be
-returned; if no dates match, an empty SpatRaster is returned).}
+For example, c("2019-01-01", "03-01-2019", "2011-Mar-08") will return any
+data layers on the 1st or 3rd January 2019, and on the 8th March 2011. If
+no dates match, an empty SpatRaster is returned.
 
-\item{periods}{Used for extended periods rather than individual dates.
+\emph{NOTE:} Dates \strong{cannot} be entered in the format "MM-DD-YYYY".
+Internally, function identifies the year as the value with 4 digits, the
+month as the middle value of the string, and the day as the remaining
+part of the string.}
+
+\item{periods}{Which date/s to return? Used for extended periods rather
+than individual dates. Cannot be used in conjunction with the 'dates'
+argument.
+
 Input dates must be a vector, with the first value indicating when the
-period begins and the second when the period ends. For multiple periods,
-use a list of such vectors, for example:
-```
-list(c("2019-01-01", "2019-01-03"),     # 1-3  Jan 2019
-c("2011-03-08", "2011-03-11"))     # 8-11 Mar 2011
-````
+period begins and the second when the period ends.
+
+For multiple periods, use a list of such vectors, for example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(c("2019-01-01", "2019-01-03"),     # 1-3  Jan 2019
+     c("2011-03-08", "2011-03-11"))     # 8-11 Mar 2011
+}\if{html}{\out{</div>}}
+
 The above will return the layers for 1st, 2nd and 3rd of January 2019,
 and the 8th, 9th, 10th and 11th of March 2011.}
 
-\item{before}{numeric: The maximum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{before}{Only data that occurs before this value is returned. Cannot
+be used in conjunction with the exact values, 'after' or 'except'
+arguments.}
 
-\item{after}{numeric: The minimum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{after}{Only data that occurs after this value is returned. Cannot be
+used in conjunction with the exact values, 'before' or 'except'
+arguments.}
 
-\item{except}{Dates that should be removed from the 'x' SpatRaster. If a
+\item{except}{Which date/s should be excluded from the SpatRaster? If a
 vector, all dates are treated individually; for extended periods, use a
 list of vectors as outlined in the 'periods' argument.}
 }

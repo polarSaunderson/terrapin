@@ -13,8 +13,8 @@ subset_by_summer <- function(x, summers = NULL,
   #'
   #' @inheritParams subset_by
   #' @param summers Which summer/s to return? Use this argument for exact
-  #'   matches (e.g. c(1980:1990, 1995:1997), otherwise leave this as NULL (the
-  #'   default) and use one of the other arguments.
+  #'   matches (e.g. c(1980:1990, 1995:1997). Cannot be used in conjunction with
+  #'   the 'before', 'after' or 'except' arguments.
   #'
   #' @export
 

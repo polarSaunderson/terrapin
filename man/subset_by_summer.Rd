@@ -19,26 +19,32 @@ which case it is interpreted as a filepath and read in using
 \code{\link[terra:rast]{terra::rast()}}; or an existing SpatRaster.}
 
 \item{summers}{Which summer/s to return? Use this argument for exact
-matches (e.g. c(1980:1990, 1995:1997), otherwise leave this as NULL (the
-default) and use one of the other arguments.}
+matches (e.g. c(1980:1990, 1995:1997). Cannot be used in conjunction with
+the 'before', 'after' or 'except' arguments.}
 
-\item{before}{numeric: The maximum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{before}{Only data that occurs before this value is returned. Cannot
+be used in conjunction with the exact values, 'after' or 'except'
+arguments.}
 
-\item{after}{numeric: The minimum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{after}{Only data that occurs after this value is returned. Cannot be
+used in conjunction with the exact values, 'before' or 'except'
+arguments.}
 
-\item{except}{vector: Values that the 'type' value cannot match.}
+\item{except}{vector: Which data should be excluded from the SpatRaster?
+Cannot be used in conjunction with the exact values, 'after' or 'before'
+arguments.}
 
 \item{australSplit}{numeric: If not FALSE, create an additional column for
 the austral summer / year. For example, December 1991 and January 1992
 often need to be considered as part of summer 1991/1992 in the southern
-hemisphere rather than in their respective years. The default value is 3,
-which means that all months \emph{AFTER} March (i.e. month 3) are considered
-as part of the following austral summer / year (i.e. April 1991 -- March
-1992 are all in austral summer / year 1992). Swap this value accordingly:
-e.g. setting it as 4 means May 1991 -- April 1992 are all austral summer
-/ year 1992.}
+hemisphere rather than in their respective years.
+
+The default value is 3, which means that all months \emph{AFTER} March (i.e.
+month 3) are considered as part of the following austral summer / year
+(i.e. April 1991 -- March 1992 are all in austral summer / year 1992).
+
+Swap this value accordingly: e.g. setting it as 4 means May 1991 -- April
+1992 are all austral summer / year 1992.}
 }
 \description{
 Easily select only the layers of a SpatRaster depending on

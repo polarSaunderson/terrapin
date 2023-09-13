@@ -20,10 +20,12 @@ which case it is interpreted as a filepath and read in using
 \code{\link[terra:rast]{terra::rast()}}; or an existing SpatRaster.}
 
 \item{months}{Which month/s to return? Use this argument for exact matches
-(e.g. c(1:4, 8), otherwise leave this as NULL (the default) and use one
-of the other arguments. This argument is fed through \code{\link[=get_months]{get_months()}}, so
-can be input either as (e.g.) 12, "12", "Dec", "dec", "December", or
-"december".}
+(e.g. c(1:4, 8). Cannot be used in conjunction with the 'before', 'after',
+or 'except' arguments.
+
+\strong{Note:} This argument is fed through \code{\link[=get_months]{get_months()}}, so this argument
+can be input in different formats. For example, December can be input as:
+12, "12", "Dec", "dec", "December", or "december".}
 
 \item{excludeIncomplete}{Be careful using this argument! It can
 dramatically affect the output of this function. Please read the
@@ -47,13 +49,17 @@ it is necessary to define whether the data is at a daily or monthly
 resolution. See \code{\link[=exclude_incomplete_summers]{exclude_incomplete_summers()}} and
 \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}} for more information.}
 
-\item{before}{numeric: The maximum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{before}{Only data that occurs before this value is returned. Cannot
+be used in conjunction with the exact values, 'after' or 'except'
+arguments.}
 
-\item{after}{numeric: The minimum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{after}{Only data that occurs after this value is returned. Cannot be
+used in conjunction with the exact values, 'before' or 'except'
+arguments.}
 
-\item{except}{vector: Values that the 'type' value cannot match.}
+\item{except}{vector: Which data should be excluded from the SpatRaster?
+Cannot be used in conjunction with the exact values, 'after' or 'before'
+arguments.}
 }
 \description{
 Easily select only the layers of a SpatRaster depending on

@@ -22,37 +22,47 @@ which case it is interpreted as a filepath and read in using
 \item{type}{Which time/date type should the data be subset based on?
 Options are (example using a date of 2019-11-29 and time of 12:30):
 \itemize{
+\item date      2019-11-29
 \item year      2019
 \item month     11
 \item day       29
+\item monthDay  Nov-29
 \item summer    2020
 \item hour      12
 \item minute    30
 }}
 
-\item{exact}{vector: Values that the 'type' value must match exactly. Only
-one of the criteria arguments can be used at once.}
+\item{exact}{vector: Which data should be included in the returned
+SpatRaster? Only data that occurs on these exact dates / times is
+returned. Cannot be used in conjunction with the 'before', 'after' or
+'except' arguments.}
 
-\item{before}{numeric: The maximum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{before}{Only data that occurs before this value is returned. Cannot
+be used in conjunction with the exact values, 'after' or 'except'
+arguments.}
 
-\item{after}{numeric: The minimum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{after}{Only data that occurs after this value is returned. Cannot be
+used in conjunction with the exact values, 'before' or 'except'
+arguments.}
 
-\item{except}{vector: Values that the 'type' value cannot match.}
+\item{except}{vector: Which data should be excluded from the SpatRaster?
+Cannot be used in conjunction with the exact values, 'after' or 'before'
+arguments.}
 
 \item{australSplit}{numeric: If not FALSE, create an additional column for
 the austral summer / year. For example, December 1991 and January 1992
 often need to be considered as part of summer 1991/1992 in the southern
-hemisphere rather than in their respective years. The default value is 3,
-which means that all months \emph{AFTER} March (i.e. month 3) are considered
-as part of the following austral summer / year (i.e. April 1991 -- March
-1992 are all in austral summer / year 1992). Swap this value accordingly:
-e.g. setting it as 4 means May 1991 -- April 1992 are all austral summer
-/ year 1992.}
+hemisphere rather than in their respective years.
+
+The default value is 3, which means that all months \emph{AFTER} March (i.e.
+month 3) are considered as part of the following austral summer / year
+(i.e. April 1991 -- March 1992 are all in austral summer / year 1992).
+
+Swap this value accordingly: e.g. setting it as 4 means May 1991 -- April
+1992 are all austral summer / year 1992.}
 }
 \description{
 Easily select layers of a SpatRaster depending on their date
-(and time if present). This is designed as an internal function that some
-of the other, simpler \code{subset_by_x} functions are based on.
+(and time, if present). This is designed as an internal function that the
+other \code{subset_by_x} functions are based on.
 }

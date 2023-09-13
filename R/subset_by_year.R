@@ -9,8 +9,8 @@ subset_by_year <- function(x, years = NULL,
   #'
   #' @inheritParams subset_by
   #' @param years Which year/s to return? Use this argument for exact matches
-  #'   (e.g. c(1983:1986, 1991:1992), otherwise leave this as NULL (the default)
-  #'   and use one of the other arguments.
+  #'   (e.g. c(1983:1986, 1991:1992). Cannot be used in conjunction with
+  #'   the 'before', 'after' or 'except' arguments.
   #'
   #' @export
 

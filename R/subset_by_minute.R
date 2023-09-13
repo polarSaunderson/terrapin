@@ -10,9 +10,9 @@ subset_by_minute <- function(x, minutes = NULL,
   #'   raster.
   #'
   #' @inheritParams subset_by
-  #' @param hours Which minute/s to return? Use this argument for exact matches
-  #'   (e.g. c(0:15, 30:40)), otherwise leave this as NULL (the default) and use
-  #'   one of the other arguments.
+  #' @param minutes Which minutes/s to return? Use this argument for exact
+  #'   matches (e.g. c(0:15, 30, 45). Cannot be used in conjunction with
+  #'   the 'before', 'after' or 'except' arguments.
   #'
   #' @export
 

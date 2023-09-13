@@ -9,9 +9,10 @@ subset_by_hour <- function(x, hours = NULL,
   #'   information is available in the 'x' raster.
   #'
   #' @inheritParams subset_by
-  #' @param hours Which hour/s to return? Use this argument for exact matches
-  #'   (e.g. c(12:17, 21-22)), otherwise leave this as NULL (the default) and
-  #'   use one of the other arguments. Must be in the 24-hour format.
+  #' @param hours Which hour/s to return? Use this argument for exact
+  #'   matches (e.g. c(12:17, 21, 23). Cannot be used in conjunction with
+  #'   the 'before', 'after' or 'except' arguments. Must be in the 24-hour
+  #'   format.
   #'
   #' @export
 

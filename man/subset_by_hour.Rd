@@ -11,17 +11,22 @@ subset_by_hour(x, hours = NULL, before = NULL, after = NULL, except = NULL)
 which case it is interpreted as a filepath and read in using
 \code{\link[terra:rast]{terra::rast()}}; or an existing SpatRaster.}
 
-\item{hours}{Which hour/s to return? Use this argument for exact matches
-(e.g. c(12:17, 21-22)), otherwise leave this as NULL (the default) and
-use one of the other arguments. Must be in the 24-hour format.}
+\item{hours}{Which hour/s to return? Use this argument for exact
+matches (e.g. c(12:17, 21, 23). Cannot be used in conjunction with
+the 'before', 'after' or 'except' arguments. Must be in the 24-hour
+format.}
 
-\item{before}{numeric: The maximum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{before}{Only data that occurs before this value is returned. Cannot
+be used in conjunction with the exact values, 'after' or 'except'
+arguments.}
 
-\item{after}{numeric: The minimum value that the 'type' value can have.
-Only one of the criteria arguments can be used at once.}
+\item{after}{Only data that occurs after this value is returned. Cannot be
+used in conjunction with the exact values, 'before' or 'except'
+arguments.}
 
-\item{except}{vector: Values that the 'type' value cannot match.}
+\item{except}{vector: Which data should be excluded from the SpatRaster?
+Cannot be used in conjunction with the exact values, 'after' or 'before'
+arguments.}
 }
 \description{
 Easily select only the layers of a SpatRaster depending on

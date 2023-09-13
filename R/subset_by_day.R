@@ -14,8 +14,8 @@ subset_by_day <- function(x, days = NULL,
   #'
   #' @inheritParams subset_by
   #' @param days Which day/s to return? Use this argument for exact matches
-  #'   (e.g. c(1, 8, 15)), otherwise leave this as NULL (the default) and use
-  #'   one of the other arguments.
+  #'   (e.g. c(1, 8, 15:18). Cannot be used in conjunction with the 'before',
+  #'   'after' or 'except' arguments.
   #'
   #' @export
 
