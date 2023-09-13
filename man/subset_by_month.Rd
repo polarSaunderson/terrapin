@@ -23,9 +23,9 @@ which case it is interpreted as a filepath and read in using
 (e.g. c(1:4, 8). Cannot be used in conjunction with the 'before', 'after',
 or 'except' arguments.
 
-\strong{Note:} This argument is fed through \code{\link[=get_months]{get_months()}}, so this argument
-can be input in different formats. For example, December can be input as:
-12, "12", "Dec", "dec", "December", or "december".}
+\strong{Note:} This argument is fed through \code{\link[=get_months]{get_months()}}, so this
+argument can be input in different formats. For example, December can be
+input as any of: 12, "12", "Dec", "dec", "December", or "december".}
 
 \item{excludeIncomplete}{Be careful using this argument! It can
 dramatically affect the output of this function. Please read the

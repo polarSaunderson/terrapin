@@ -15,7 +15,7 @@ exclude_unmatched_months <- function(x,
   }
 
   # Basic date information
-  xDates     <- get_terra_dates(x, australSplit = australSplit)
+  xDates     <- get_date_info(x, australSplit = australSplit)
   xMonths    <- xDates$month |> unique() |> sort()
   incMonths  <- c()
 
@@ -95,7 +95,7 @@ exclude_unmatched_days <- function(x,
   }
 
   # Basic date information
-  xDates          <- get_terra_dates(x, australSplit = australSplit)
+  xDates          <- get_date_info(x, australSplit = australSplit)
   xDates$monthDay <- handle_monthDays(xDates$monthDay, out = "mm-dd")
   xMonthDays   <- xDates$monthDay |> unique() |> sort()
   incMonthDays <- c()

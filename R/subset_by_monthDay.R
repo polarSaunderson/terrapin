@@ -121,8 +121,9 @@ subset_by_monthDay <- function(x,
   # The monthDay doesn't work for > or < in format used in subset_by
   if (!is.null(before) | !is.null(after)) {
     # Handle if x is a filename
-    x <- terra::rast(x, keeptime = TRUE, keepunits = TRUE, props = TRUE)
+    x <- return_SpatRaster(x)
 
+    # Dates
     xDates <- get_date_info(x)
     xMDays <- handle_monthDays(xDates$monthDay, out = "mm-dd")
     if (!is.null(before)) {

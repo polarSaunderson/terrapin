@@ -61,7 +61,7 @@ subset_by <- function(x, type, exact = NULL,
                 stopIfNoNull = TRUE, noNullMessage = "No dates selected!")
 
   # Handle if x is a filename
-  x <- terra::rast(x, keeptime = TRUE, keepunits = TRUE, props = TRUE)
+  x <- return_SpatRaster(x)
 
   # Get dates of each layer
   xDates <- get_date_info(x, australSplit = australSplit)
