@@ -59,7 +59,8 @@ get_date_info <- function(x,
   }
 
   # Time information
-  if ("POSIXct" %in% is(dateInfo[[1]]) | "POSIXt" %in% is(dateInfo[[1]])) {
+  if ("POSIXct" %in% methods::is(dateInfo[[1]]) |
+      "POSIXt" %in% methods::is(dateInfo[[1]])) {
     # Preallocate
     time     <- rep(NA, length(dateInfo))
     hour     <- rep(NA, length(dateInfo))

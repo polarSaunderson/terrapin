@@ -1,3 +1,4 @@
+##
 check_if_null <- function(...,
                            stopIfNoNull = TRUE,
                            noNullMessage = "No conditions selected!") {
@@ -10,8 +11,6 @@ check_if_null <- function(...,
   #' @param stopIfNoNull LOGICAL: If TRUE, an error is thrown; if FALSE, a
   #'   warning is thrown.
   #' @param noNullMessage "string" The warning or error message.
-  #'
-  #' @export
 
   # Code -----------------------------------------------------------------------
   dots <- list(...)            # all input
@@ -30,4 +29,20 @@ check_if_null <- function(...,
   } else if (nullCount > 1) {
     stop("Only one condition can be used at once!")
   }
+}
+
+# Useful function here
+# These are all taken from domR, v0.0.1.10
+
+##
+`%notIn%` <- function(x, y) {
+  # Code -----------------------------------------------------------------------
+  match(x, y, nomatch = 0) == 0
+}
+
+##
+set_if_null <- function(x, defaultValue) {
+  # Code -----------------------------------------------------------------------
+    if (is.null(x)) x <- defaultValue
+    return(x)
 }

@@ -49,6 +49,23 @@ subset_by_monthDay <- function(x,
   #'   vector, all dates are treated individually; for extended periods, use a
   #'   list of vectors as outlined in the 'periods' argument.
   #'
+  #' @param excludeIncomplete Be careful using this argument! It can
+  #'   dramatically affect the output of this function. Please read the
+  #'   Explanation in [exclude_incomplete_years()] first.
+  #'
+  #'   If TRUE, the data is run through [exclude_incomplete_years()], and
+  #'   only data from the years containing all requested monthDays are returned.
+  #'
+  #'   If numeric (between 1 and 12), the data is run through
+  #'   [exclude_incomplete_summers], and the value is used as the 'australSplit'
+  #'   argument. This returns only data from the austral summers that contain
+  #'   all requested monthsDays.
+  #'
+  #'   If any other value (including the default FALSE), the
+  #'   `exclude_incomplete_x` functions are skipped, and all layers matching the
+  #'   'monthDays' argument are returned, regardless of the summer or year in
+  #'   which they occur. See the examples.
+  #'
   #' @export
 
   # Code -----------------------------------------------------------------------

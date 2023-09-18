@@ -51,6 +51,23 @@ For multiple periods, use a list of such vectors, for example:
 The above will return data from the 1st, 2nd and 3rd of January, and the
 8th, 9th, 10th and 11th of March, regardless of the year.}
 
+\item{excludeIncomplete}{Be careful using this argument! It can
+dramatically affect the output of this function. Please read the
+Explanation in \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}} first.
+
+If TRUE, the data is run through \code{\link[=exclude_incomplete_years]{exclude_incomplete_years()}}, and
+only data from the years containing all requested monthDays are returned.
+
+If numeric (between 1 and 12), the data is run through
+\link{exclude_incomplete_summers}, and the value is used as the 'australSplit'
+argument. This returns only data from the austral summers that contain
+all requested monthsDays.
+
+If any other value (including the default FALSE), the
+\code{exclude_incomplete_x} functions are skipped, and all layers matching the
+'monthDays' argument are returned, regardless of the summer or year in
+which they occur. See the examples.}
+
 \item{before}{Only data that occurs before this value is returned. Cannot
 be used in conjunction with the exact values, 'after' or 'except'
 arguments.}
