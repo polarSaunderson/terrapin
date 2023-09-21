@@ -1,35 +1,42 @@
 # terrapin
 
-**PRIVATE BRANCH OF THE pkg05_terrapin PACKAGE**
-
 ## Overview
-The terrapin package is a personal package that slightly builds on the [terra](https://rspatial.org) package. It is mainly composed of functions that allow SpatRasters to be easily subset based on their dates in different ways.
+`terrapin` is currently a personal package that builds on the excellent [terra](https://rspatial.org) package. `terrapin` is mainly composed of 
+functions that allow SpatRasters to be easily subset based on their dates in 
+different ways. 
 
-## Public Version
-The public version of this repo can be accessed at: 
-  https://github.com/polarSaunderson/terrapin
+**WARNING** Some of this is highly experimental and may not *always* follow the
+current documentation. Some functions also need extreme care when using, 
+particularly the `handle_x` and `exclude_x` functions which are prone not to
+work in new situations.
 
-## To-Do
-### 2023-09-07
-- [ ] Think about monthDay, year and day equivalents to retrieve_months
+**WARNING** The examples in most functions are "conceptual" at the moment, and 
+are nearly all wrapped in `\dontrun`. The documentation and examples will 
+continue to be updated.
 
-### 2023-08-10
-- [ ] Should any of the racmoR functions be in terrapin?
-  - [x] exclude functions
-  - [?] multiMonth
-  - [-] calc_in_space
-  - [?] others?
-  
-### 2023-08-03
-- [x] Think about correlate and regress by cell functions
- - [x] Which functions do these need, and where should they be? e.g. `apply_lm()`
+## Instructions
+This package is mainly a personal package, so it is not available on CRAN.
+To download this package directly from GitHub, you'll need to use the "devtools" 
+package.
+It's easiest to do this within RStudio.
 
-### 2023-08-02
-- [ ] Code examples in `subset_by_month()`
-- [ ] Code examples in `remove_incomplete_years()`
-- [ ] Code examples in `remove_incomplete_summers()`
-- [X] `subset_by_month() uses `domR::make_sentence_case()`
-- [X] `subset_by_date()`
-  - [X] improve examples
-  - [X] look at the code & logic; try to remove domR::sift()
-- [X] check the `remove_incomplete_x()` functions
+1) Install the [devtools](https://github.com/hadley/devtools) and [terra](https://rspatial.org) packages from CRAN: 
+``` R
+install.packages("devtools")
+install.packages("terra")     # fundamental to terrapin
+```
+
+2) Load the devtools package:
+```R
+library(devtools)
+```
+
+3) Install terrapin directly from GitHub:
+```R
+devtools::install_github("polarSaunderson/terrapin")
+```
+
+4) Load the terrapin package:
+```R
+library(terrapin)
+```
