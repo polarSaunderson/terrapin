@@ -11,6 +11,8 @@ check_if_null <- function(...,
   #' @param stopIfNoNull LOGICAL: If TRUE, an error is thrown; if FALSE, a
   #'   warning is thrown.
   #' @param noNullMessage "string" The warning or error message.
+  #'
+  #' @noRd
 
   # Code -----------------------------------------------------------------------
   dots <- list(...)            # all input
