@@ -7,14 +7,14 @@
 handle_months(x, out = 1)
 }
 \arguments{
-\item{x}{A vector of months in any of the above formats. If values don't
-correspond to these formats, the value is silently returned as it was
-input (no warning!).}
+\item{x}{A vector of months in any of the formats shown in the "Accepted
+Formats" section. If values don't correspond to these formats, the value
+is silently returned as it was input (no warning!).}
 
-\item{out}{How should the months be returned? Choose from any of the above
-formats. If any other values are used, the numeric representation of the
-month is used (e.g. 1 for January) or the input x, if it didn't
-correspond to a valid month.}
+\item{out}{How should the months be returned? Choose from the options in
+the "Accepted Formats" section. If any other values are used, the numeric
+representation of the month is used (e.g. 1 for January) or the input x
+is just returned if it didn't correspond to a valid month.}
 }
 \description{
 Often it is necessary to swap between representations of

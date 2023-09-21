@@ -15,14 +15,14 @@ The public version of this repo can be accessed at:
 
 ### 2023-08-10
 - [ ] Should any of the racmoR functions be in terrapin?
-  - [ ] exclude functions
-  - [ ] multiMonth
-  - [ ] calc_in_space
-  - [ ] others?
+  - [x] exclude functions
+  - [?] multiMonth
+  - [-] calc_in_space
+  - [?] others?
   
 ### 2023-08-03
-- [ ] Think about correlate and regress by cell functions
- - [ ] Which functions do these need, and where should they be? e.g. `apply_lm()`
+- [x] Think about correlate and regress by cell functions
+ - [x] Which functions do these need, and where should they be? e.g. `apply_lm()`
 
 ### 2023-08-02
 - [ ] Code examples in `subset_by_month()`

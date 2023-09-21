@@ -1,76 +1,109 @@
 subset_by_monthDay <- function(x,
                                monthDays = NULL,
-                               monthDayList = NULL,
-                               excludeIncomplete = FALSE) {
+                               periods = NULL,
+                               excludeIncomplete = FALSE,
+                               before = NULL,
+                               after = NULL,
+                               except = NULL) {
   #' Subset a SpatRaster based on the layers' month-day
   #'
   #' @description Easily select only layers of a SpatRaster that are on certain
-  #'   month-days (i.e. dates ignoring the year).
+  #'   month-days (i.e. dates which ignore the year).
   #'
   #'   As an example, return only the layers that fall on the 1st, 2nd or 3rd of
   #'   December for every year in the dataset.
   #'
-  #' @inheritParams subset_by_month
-  #' @param monthDays Used for specific dates. A vector of monthDays, best
-  #'   formatted as "Jan-14" or "14-Jan". Fed directly into [handle_monthDays()]
-  #'   to identify and reformat the month-day for matching against the
-  #'   SpatRaster dates.
+  #' @inheritParams subset_by
+  #' @param monthDays Which monthDay/s to return?  Used for specific monthDays.
+  #'   Cannot be used in conjunction with the 'periods' argument.
+  #'
+  #'   Input must be a vector of specific monthDay/s, best formatted as "Jan-14"
+  #'   or "14-Jan". The month must be explicit.
   #'
   #'   As an example, using a vector of `c("Jan-01", "7 Feb", "15/Mar)` will
   #'   find any layers that occur on the 1st of January or the 7th of February
-  #'   or the 15th March in the 'x' dataset, regardless of the layers' year.
-  #'
-  #'   **Note:** Something like "01/02" will fail. It is ambiguous.
-  #'
-  #' @param monthDayList Used for extended periods of dates. Input must be a
-  #'   list of vectors, with the first value in each vector indicating when the
-  #'   period begins, and the second when the period ends.
-  #'
-  #'   For example, `list(c("Jan-02", "Jan-04"), c("Feb-07", "Feb-09"))` will
-  #'   return all layers that occur on the 2nd, 3rd or 4th January, or on the
-  #'   7th, 8th or 9th of February in the dataset, regardless of the layers'
+  #'   or the 15th March in the input SpatRaster, regardless of the layers'
   #'   year.
+  #'
+  #'   **Note:** Something like "01/02" will fail. It is ambiguous. This
+  #'   argument is fed directly into [terrapin::handle_monthDays()] to identify
+  #'   and reformat the month-day, so see that function for details on accepted
+  #'   inputs.
+  #'
+  #' @param periods Which monthDay/s to return? Used for extended periods rather
+  #'   than individual monthDays. Cannot be used in conjunction with the
+  #'   'monthDays' argument.
+  #'
+  #'   Input dates must be a vector, with the first value indicating when the
+  #'   period begins and the second when the period ends.
+  #'
+  #'   For multiple periods, use a list of such vectors, for example:
+  #'   ```
+  #'   list(c("Jan-01", "Jan-01"),   # 1-3  Jan for every year in the SpatRaster
+  #'        c("Mar-08", "Mar-11"))   # 8-11 Mar for every year in the SpatRaster
+  #'   ```
+  #'   The above will return data from the 1st, 2nd and 3rd of January, and the
+  #'   8th, 9th, 10th and 11th of March, regardless of the year.
+  #'
+  #' @param except Which monthDay/s should be excluded from the SpatRaster? If a
+  #'   vector, all dates are treated individually; for extended periods, use a
+  #'   list of vectors as outlined in the 'periods' argument.
+  #'
+  #' @param excludeIncomplete Be careful using this argument! It can
+  #'   dramatically affect the output of this function. Please read the
+  #'   Explanation in [exclude_incomplete_years()] first.
+  #'
+  #'   If TRUE, the data is run through [exclude_incomplete_years()], and
+  #'   only data from the years containing all requested monthDays are returned.
+  #'
+  #'   If numeric (between 1 and 12), the data is run through
+  #'   [exclude_incomplete_summers], and the value is used as the 'australSplit'
+  #'   argument. This returns only data from the austral summers that contain
+  #'   all requested monthsDays.
+  #'
+  #'   If any other value (including the default FALSE), the
+  #'   `exclude_incomplete_x` functions are skipped, and all layers matching the
+  #'   'monthDays' argument are returned, regardless of the summer or year in
+  #'   which they occur. See the examples.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Check that some dates have been requested!
-  if (is.null(monthDays[1]) & is.null(monthDayList[1])) {
-    stop("No dates selected!")
-  }
-  if (!is.null(monthDays[1]) & !is.null(monthDayList[1])) {
-    stop("Use either the monthDays or monthDayList argument, not both.")
-  }
+  # Guard: only one of the options can be used at once
+  check_if_null(monthDays, periods, before, after, except,
+                stopIfNoNull = TRUE, noNullMessage = "No dates selected!")
 
   # Handle different formats
   if (!is.null(monthDays[1])) {
     monthDays <- handle_monthDays(monthDays, out = "Jan-01")
+  } else if (!is.null(periods[1])) {
+    if (!is.list(periods)) {
+      periods <- list(periods)
+    }
+    periods <- lapply(periods,
+                      FUN = handle_monthDays,
+                      out = "Jan-01")
+    toPrepare <- periods
+  } else if (!is.null(before)) {
+    before <- handle_monthDays(before, out = "Jan-01")
+  } else if (!is.null(after)) {
+    after <- handle_monthDays(after, out = "Jan-01")
+  } else if (!is.null(except[1])) {
+    if (is.list(except)) {
+      except <- lapply(except,
+                       FUN = handle_monthDays,
+                       out = "Jan-01")
+      toPrepare <- except
+    } else {
+      except <- handle_monthDays(except)
+    }
   }
 
-  if (!is.null(monthDayList[1])) {
-    monthDayList <- lapply(monthDayList, handle_monthDays)
-  }
-
-  # Handle if x is a filename
-  if ("SpatRaster" %notIn% methods::is(x)) {
-    x <- terra::rast(x)
-  }
-
-  # Handle the various date entry options --------------------------------------
-  if (!is.null(monthDayList)[1]) {
-    # Handle if a c(start, end) vector is provided
-    if ("list" %notIn% methods::is(monthDayList)) {
-      if (length(monthDayList) == 2) {
-        monthDayList <- list(monthDayList)
-      } else {
-        stop("'monthDayList' must be either a single vector `c(start, end)`, ",
-             "or a list of such vectors.")
-      }
-    } # else it must already be a list!
-
-    # Separate the start and end dates
-    startEach <- sapply(monthDayList, "[[", 1)
-    endEach   <- sapply(monthDayList, "[[", 2)
+  # Handle if periods or except list were used as input
+  if (exists("toPrepare")) {
+    # Separate the start and end date
+    startEach <- sapply(toPrepare, "[[", 1)
+    endEach   <- sapply(toPrepare, "[[", 2)
 
     # Do the dates cross the new year?
     startMonth <- get_months(startEach, 1)
@@ -92,18 +125,40 @@ subset_by_monthDay <- function(x,
     }
 
     # Strip away the fake dates
-    monthDays <- as.Date(fakeDates, "1970-01-01") |>
-      handle_monthDays(out = "Jan-01")
+    if (!is.null(periods)) {
+      monthDays <- as.Date(fakeDates, "1970-01-01") |>
+        handle_monthDays(out = "Jan-01")
+      periods <- NULL
+    } else if (!is.null(except)) {
+      except <- as.Date(fakeDates, "1970-01-01") |>
+        handle_monthDays(out = "Jan-01")
+    }
   }
 
-  # Subset Data ----------------------------------------------------------------
-  xDates <- get_terra_dates(x, australSplit = excludeIncomplete)
+  # The monthDay doesn't work for > or < in format used in subset_by
+  if (!is.null(before) | !is.null(after)) {
+    # Handle if x is a filename
+    x <- return_SpatRaster(x)
 
-  # Which rows of the xDates monthDays match our requested monthDays?
-  mdIndex <- which(xDates$monthDay %in% monthDays)
-
-  # Subset
-  xSubset <- terra::subset(x, mdIndex)
+    # Dates
+    xDates <- get_date_info(x)
+    xMDays <- handle_monthDays(xDates$monthDay, out = "mm-dd")
+    if (!is.null(before)) {
+      before <- handle_monthDays(before, out = "mm-dd")
+      xIndex <- which(xMDays < before)
+    } else if (!is.null(after)) {
+      after  <- handle_monthDays(after, out = "mm-dd")
+      xIndex <- which(xMDays > after)
+    }
+    # Retrieve the layers of interest
+    xSubset <- terra::subset(x, xIndex)
+  } else {
+    # Retrieve the layers of interest
+    xSubset <- subset_by(x, type = "monthDay",
+                         exact = monthDays,
+                         before = before, after = after,
+                         except = except)
+  }
 
   # Handle if removing
   if (excludeIncomplete %in% 1:12) {
@@ -119,43 +174,3 @@ subset_by_monthDay <- function(x,
 
   return(xSubset)
 }
-#
-#   #
-#   #
-#
-#   if ("list" %notIn% is(monthDays)) monthDays <- list(monthDays)
-#
-#   # Separate the start and end dates
-#   startEach <- sapply(monthDays, "[[", 1)
-#   endEach   <- sapply(monthDays, "[[", 2)
-#
-# # We need to know if the dates cross the new year for an austral summer split
-# startMonth <- strsplit(startEach, "-") |> sapply("[[", 1) |> as.numeric()
-# endMonth   <- strsplit(endEach,   "-") |> sapply("[[", 1) |> as.numeric()
-#
-# fakeStart <- ifelse(test = endMonth < startMonth,
-#                     yes  = "1979",
-#                     no   = "1980") |>
-#   paste(startEach, sep = "-")
-# fakeEnd  <- paste("1980", endEach, sep = "-")
-#
-# # Get all dates in between the starts and ends
-# fakeDates <- c() # preallocate
-# for (ii in seq_along(fakeStart)) {
-#   iiDates  <- as.Date(fakeStart[ii]):as.Date(fakeEnd[ii])
-#   fakeDates <- c(fakeDates, iiDates)
-# }
-#
-# # Strip away the fakeYear part and keep as a string
-# allMonthDays <- as.Date(fakeDates, "1970-01-01") |> strftime("%m-%d")
-#
-# # Subset
-# xDates <- get_terra_dates(tstIn)
-# x <- xDates$monthDay
-#
-# index <- which(xDates$monthDay %in% allMonthDays)
-#
-# xDates[index, ]
-#
-#
-# }

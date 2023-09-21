@@ -1,41 +1,22 @@
-subset_by_year <- function(x, years) {
+subset_by_year <- function(x, years = NULL,
+                           before = NULL, after = NULL,
+                           except = NULL) {
   #' Subset a SpatRaster based on the layers' year
   #'
-  #' @description Easily select only layers of a SpatRaster that are in a
-  #'   certain year/s. For example, only want layers that are in 1991.
+  #' @description Easily select only the layers of a SpatRaster depending on
+  #'   only the layers' year. For example, only data in 1991, or only data after
+  #'   1999.
   #'
-  #' @param x SpatRaster: The data to subset. Can be either a string, in which
-  #'   case it is interpreted as a filePath and read in; or an existing
-  #'   SpatRaster.
-  #' @param years vector: Which year/s to return?
-  #'
-  #' @examples
-  #' \dontrun{
-  #'   x <- terra::rast("fileName.nc")
-  #'
-  #'   # Only 1991
-  #'   x91 <- terrapin::subset_by_year(x, 1991)
-  #'
-  #'   # From 1991 to 1994
-  #'   x9194 <- terrapin::subset_by_year(x, 1991:1994)
-  #' }
+  #' @inheritParams subset_by
+  #' @param years Which year/s to return? Use this argument for exact matches
+  #'   (e.g. c(1983:1986, 1991:1992). Cannot be used in conjunction with
+  #'   the 'before', 'after' or 'except' arguments.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Handle if x is a filename
-  if ("SpatRaster" %notIn% methods::is(x)) {
-    x <- terra::rast(x)
-  }
-
-  # Get dates of each layer
-  xDates <- get_terra_dates(x, australSplit = FALSE)
-
-  # Identify relevant layers
-  yearlyIndex <- which(xDates$year %in% years)
-
-  # Subset the data
-  xSubset <- terra::subset(x, yearlyIndex)
-
+  xSubset <- subset_by(x, type = "year", exact = years,
+                       before = before, after = after,
+                       except = except)
   return(xSubset)
 }

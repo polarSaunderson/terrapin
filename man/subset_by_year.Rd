@@ -4,28 +4,31 @@
 \alias{subset_by_year}
 \title{Subset a SpatRaster based on the layers' year}
 \usage{
-subset_by_year(x, years)
+subset_by_year(x, years = NULL, before = NULL, after = NULL, except = NULL)
 }
 \arguments{
-\item{x}{SpatRaster: The data to subset. Can be either a string, in which
-case it is interpreted as a filePath and read in; or an existing
-SpatRaster.}
+\item{x}{SpatRaster: The data to subset. It can be either a string, in
+which case it is interpreted as a filepath and read in using
+\code{\link[terra:rast]{terra::rast()}}; or an existing SpatRaster.}
 
-\item{years}{vector: Which year/s to return?}
+\item{years}{Which year/s to return? Use this argument for exact matches
+(e.g. c(1983:1986, 1991:1992). Cannot be used in conjunction with
+the 'before', 'after' or 'except' arguments.}
+
+\item{before}{Only data that occurs before this value is returned. Cannot
+be used in conjunction with the exact values, 'after' or 'except'
+arguments.}
+
+\item{after}{Only data that occurs after this value is returned. Cannot be
+used in conjunction with the exact values, 'before' or 'except'
+arguments.}
+
+\item{except}{vector: Which data should be excluded from the SpatRaster?
+Cannot be used in conjunction with the exact values, 'after' or 'before'
+arguments.}
 }
 \description{
-Easily select only layers of a SpatRaster that are in a
-certain year/s. For example, only want layers that are in 1991.
-}
-\examples{
-\dontrun{
-  x <- terra::rast("fileName.nc")
-
-  # Only 1991
-  x91 <- terrapin::subset_by_year(x, 1991)
-
-  # From 1991 to 1994
-  x9194 <- terrapin::subset_by_year(x, 1991:1994)
-}
-
+Easily select only the layers of a SpatRaster depending on
+only the layers' year. For example, only data in 1991, or only data after
+1999.
 }

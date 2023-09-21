@@ -231,7 +231,7 @@ exclude_incomplete_years <- function(x,
 
   # Code ----------------------------------------------------------------------!
   # Basic date information
-  xDates     <- get_terra_dates(x, australSplit = FALSE)
+  xDates     <- get_date_info(x, australSplit = FALSE)
   xYears     <- xDates$year |> unique() |> sort()
   incYears   <- c()
 
@@ -318,7 +318,7 @@ exclude_incomplete_summers <- function(x,
 
   # Code ----------------------------------------------------------------------!
   # Basic date information
-  xDates     <- get_terra_dates(x, australSplit = australSplit)
+  xDates     <- get_date_info(x, australSplit = australSplit)
   xSummers   <- xDates$summer |> unique() |> sort()
   incSummers <- c()
 
