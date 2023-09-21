@@ -1,27 +1,33 @@
-correlate_by_cell <- function(xy, detrend, method = "pearson") {
+correlate_by_cell <- function(xy,
+                              detrend,
+                              method = "pearson") {
   #' Calculates the per-pixel correlation between 2 SpatRasters
   #'
   #' @description Say we have a temperature SpatRaster with 20 layers, and a
   #'   precipitation SpatRaster with 20 layers. We want to create a map that
   #'   shows the correlation between temperature and precipitation across the 20
-  #'   years for *each* pixel. Use this function and `terra::app()`. This
+  #'   years for *each* pixel. Use this function and [terra::app()]. This
   #'   function largely follows the code from Robert Hijmans here:
-  #'   https://stackoverflow.com/questions/16698048/r-calculating-pearson-correlation-coefficient-in-each-cell-along-time-line
+  #'   [https://stackoverflow.com/questions/16698048/r-calculating-pearson-correlation-coefficient-in-each-cell-along-time-line]().
   #'
   #'   It is necessary to first combine the two datasets, using `c()`, and then
-  #'   run the `terra::app()` function. See examples.
+  #'   run the [terra::app()] function. See examples.
+  #'
+  #'   A SpatRaster with 2 layers is returned; the first is the correlation
+  #'   estimate and the second is the p-value.
   #'
   #' @param xy SpatRaster: The dataset, which should be `c(x, y)`.
   #' @param detrend BINARY: Should the time series be detrended before the
-  #'   correlation?
+  #'   correlation? Detrending is performed by using the residuals of the a
+  #'   linear fit: `stats::resid(stats::lm(xx ~ seq_along(xx))`.
   #' @param method "string": Which correlation coefficient to use? One of
-  #'   "pearson", "kendall", or "spearman". See `stats::cor.test()`.
+  #'   "pearson", "kendall", or "spearman". See [stats::cor.test()].
   #'
   #' @examples
   #'   \dontrun{
   #'     # We want to correlate x with y
-  #'     x <- terra::rast("pretend1.nc")   # n layers
-  #'     y <- terra::rast("pretend2.nc")   # also n layers
+  #'     x <- terra::rast("precip.nc")   # n layers
+  #'     y <- terra::rast("temp.nc")     # also n layers
   #'
   #'     # Combine
   #'     xy <- c(x, y)
@@ -47,10 +53,10 @@ correlate_by_cell <- function(xy, detrend, method = "pearson") {
 
     # Detrend using a linear model
     if (isTRUE(detrend)) {
-      # xx <- domR::linear_detrend(xx)      # require domR
-      # yy <- domR::linear_detrend(yy)
-      xx <- stats::resid(stats::lm(xx ~ seq_along(xx), na.action = stats::na.exclude))
-      yy <- stats::resid(stats::lm(yy ~ seq_along(yy), na.action = stats::na.exclude))
+      xx <- stats::resid(stats::lm(xx ~ seq_along(xx),
+                                   na.action = stats::na.exclude))
+      yy <- stats::resid(stats::lm(yy ~ seq_along(yy),
+                                   na.action = stats::na.exclude))
     }
 
     # Correlate & return

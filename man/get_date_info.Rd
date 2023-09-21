@@ -9,24 +9,31 @@ get_date_info(x, australSplit = 3)
 \arguments{
 \item{x}{SpatRaster: The dataset.}
 
-\item{australSplit}{numeric: If not FALSE, create an additional column for
-the austral summer / year. For example, December 1991 and January 1992
-often need to be considered as part of summer 1991/1992 in the southern
-hemisphere rather than in their respective years. The default value is 3,
-which means that all months \emph{AFTER} March (i.e. month 3) are considered
-as part of the following austral summer / year (i.e. April 1991 -- March
-1992 are all in austral summer / year 1992). Swap this value accordingly:
-e.g. setting it as 4 means May 1991 -- April 1992 are all austral summer
-/ year 1992.}
+\item{australSplit}{numeric: If an integer between 1 and 12, an additional
+column is created in the data frame to store the austral summer / year.
+
+For example, in the Southern Hemisphere, December 1991 and January 1992
+often need to be considered as part of summer 1991/1992 (here referred to
+as summer 1992) rather than in their respective years.
+
+The default value is 3, which means that all months \emph{AFTER} March (i.e.
+month 3) are considered as part of the following austral summer / year
+(i.e. April 1991 -- March 1992 are all in austral summer / year 1992).
+
+Swap this value accordingly: e.g. setting it as 4 means May 1991 -- April
+1992 are all austral summer / year 1992.}
 }
 \description{
-Often it is necessary to select only a subset of layers in a
-dataset based on their date or time. For example, only layers in
-December, only in 2017, or only in the afternoon. The date (and possibly
-time) information is stored in the SpatRaster; this function creates a
-simple data frame to hold the date information, thus allowing the correct
-layers to be identified and filtered. This only works with SpatRasters
-from the \code{terra} package, and they must have the date & time information
-necessary. Any missing data is assigned a value of NA. If the data has
-no time information, the time columns are excluded.
+The \code{\link[=get_date_info]{get_date_info()}} function is the basis of the \code{terrapin}
+package. It simply creates a data frame of the time information stored in
+a SpatRaster (each row is a SpatRaster layer), making it easy to subset
+and/or exclude layers in the SpatRaster based on their date / time.
+
+It is used in the \code{subset_by_x} functions, but can also be used in any
+instance where it is useful to have the date / time in a dataframe.
+
+This function is based on \code{\link[terra:time]{terra::time()}} and only works with SpatRasters
+from the \code{terra} package. The layers \strong{must} have dates for this
+function to work; if the layers don't have associated times, the time
+columns are simply not created.
 }

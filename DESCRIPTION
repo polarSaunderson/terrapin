@@ -10,7 +10,7 @@ Authors@R:
 Description: `terrapin` is currently a personal package that builds on the 
     excellent [terra](https://rspatial.org) package. `terrapin` is mainly 
     composed of functions that allow SpatRasters to be easily subset based on 
-    their dates in different ways. Version 0.1.0-rc1
+    their dates in different ways. Version 0.1.0-rc2.
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.2.3

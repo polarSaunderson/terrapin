@@ -6,14 +6,6 @@ handle_monthDays <- function(x, out = "Jan-01", outSep = "-") {
   #'   last are ambiguous but can be useful in defined situations, for example
   #'   pasting with a year to create a date.
   #'
-  #'   ```
-  #'       Jun-04
-  #'       06-04
-  #'       04-06
-  #'       4-6
-  #'       6-4
-  #'   ````
-  #'
   #'   This function should work as long as the month is unambiguous in a string
   #'   with a reasonable separator (see below). It can handle these inputs:
   #'   ```
@@ -44,7 +36,9 @@ handle_monthDays <- function(x, out = "Jan-01", outSep = "-") {
   #'       "m-d"      returns "6-20"     "3-5"
   #'       "d-m"      returns "20-6"     "5-3"
   #'   ```
-  #'   The divider can be set using the 'outSep' argument.
+  #'   Any other strings will default to the "Jan-01" option.
+  #'   The separator can be ignored in this argument (i.e. "dm" = "d-m"), and
+  #'   is set instead using the 'outSep' argument.
   #'
   #' @param outSep Which symbol should be placed between the date and month?
   #'   Default is "-", but will accept any reasonable string.

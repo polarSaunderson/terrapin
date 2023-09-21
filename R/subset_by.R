@@ -5,8 +5,9 @@ subset_by <- function(x, type, exact = NULL,
   #' Subset a SpatRaster based on the layers' dates
   #'
   #' @description Easily select layers of a SpatRaster depending on their date
-  #'   (and time, if present). This is designed as an internal function that the
-  #'   other `subset_by_x` functions are based on.
+  #'   (and time, if present). This was designed as an internal function that
+  #'   the other `subset_by_x` functions are based on but is also available on
+  #'   its own.
   #'
   #' @param x SpatRaster: The data to subset. It can be either a string, in
   #'   which case it is interpreted as a filepath and read in using
@@ -14,16 +15,16 @@ subset_by <- function(x, type, exact = NULL,
   #'
   #' @param type Which time/date type should the data be subset based on?
   #'   Options are (example using a date of 2019-11-29 and time of 12:30):
-  #'
-  #'   - date      2019-11-29
-  #'   - year      2019
-  #'   - month     11
-  #'   - day       29
-  #'   - monthDay  Nov-29
-  #'   - summer    2020
-  #'   - hour      12
-  #'   - minute    30
-  #'
+  #'   ```
+  #'   - "date"          2019-11-29
+  #'   - "year"          2019
+  #'   - "month"         11
+  #'   - "day"           29
+  #'   - "monthDay"      Nov-29
+  #'   - "summer"        2020
+  #'   - "hour"          12
+  #'   - "minute"        30
+  #' ```
   #' @param exact vector: Which data should be included in the returned
   #'   SpatRaster? Only data that occurs on these exact dates / times is
   #'   returned. Cannot be used in conjunction with the 'before', 'after' or

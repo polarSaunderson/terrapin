@@ -22,7 +22,9 @@ ambiguity in the last options.
     "d-m"      returns "20-6"     "5-3"
 }\if{html}{\out{</div>}}
 
-The divider can be set using the 'outSep' argument.}
+Any other strings will default to the "Jan-01" option.
+The separator can be ignored in this argument (i.e. "dm" = "d-m"), and
+is set instead using the 'outSep' argument.}
 
 \item{outSep}{Which symbol should be placed between the date and month?
 Default is "-", but will accept any reasonable string.}
@@ -32,13 +34,6 @@ This function reformats month-day combinations to match
 either "Jun-04", "04-Jun", "06-04", "04-06", "6-4", or "4-6". The
 last are ambiguous but can be useful in defined situations, for example
 pasting with a year to create a date.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{    Jun-04
-    06-04
-    04-06
-    4-6
-    6-4
-}\if{html}{\out{</div>}}
 
 This function should work as long as the month is unambiguous in a string
 with a reasonable separator (see below). It can handle these inputs:

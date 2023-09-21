@@ -10,27 +10,31 @@ correlate_by_cell(xy, detrend, method = "pearson")
 \item{xy}{SpatRaster: The dataset, which should be \code{c(x, y)}.}
 
 \item{detrend}{BINARY: Should the time series be detrended before the
-correlation?}
+correlation? Detrending is performed by using the residuals of the a
+linear fit: \verb{stats::resid(stats::lm(xx ~ seq_along(xx))}.}
 
 \item{method}{"string": Which correlation coefficient to use? One of
-"pearson", "kendall", or "spearman". See \code{stats::cor.test()}.}
+"pearson", "kendall", or "spearman". See \code{\link[stats:cor.test]{stats::cor.test()}}.}
 }
 \description{
 Say we have a temperature SpatRaster with 20 layers, and a
 precipitation SpatRaster with 20 layers. We want to create a map that
 shows the correlation between temperature and precipitation across the 20
-years for \emph{each} pixel. Use this function and \code{terra::app()}. This
+years for \emph{each} pixel. Use this function and \code{\link[terra:app]{terra::app()}}. This
 function largely follows the code from Robert Hijmans here:
-https://stackoverflow.com/questions/16698048/r-calculating-pearson-correlation-coefficient-in-each-cell-along-time-line
+\url{https://stackoverflow.com/questions/16698048/r-calculating-pearson-correlation-coefficient-in-each-cell-along-time-line}.
 
 It is necessary to first combine the two datasets, using \code{c()}, and then
-run the \code{terra::app()} function. See examples.
+run the \code{\link[terra:app]{terra::app()}} function. See examples.
+
+A SpatRaster with 2 layers is returned; the first is the correlation
+estimate and the second is the p-value.
 }
 \examples{
   \dontrun{
     # We want to correlate x with y
-    x <- terra::rast("pretend1.nc")   # n layers
-    y <- terra::rast("pretend2.nc")   # also n layers
+    x <- terra::rast("precip.nc")   # n layers
+    y <- terra::rast("temp.nc")     # also n layers
 
     # Combine
     xy <- c(x, y)

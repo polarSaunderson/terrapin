@@ -14,33 +14,38 @@ is silently returned as it was input (no warning!).}
 \item{out}{How should the months be returned? Choose from the options in
 the "Accepted Formats" section. If any other values are used, the numeric
 representation of the month is used (e.g. 1 for January) or the input x
-is just returned if it didn't correspond to a valid month.}
+is just returned if it didn't correspond to a valid month (e.g. 13,
+"madeupember").}
 }
 \description{
 Often it is necessary to swap between representations of
 months which is simple but just requires pointless, fiddly code. This
-function simply (via the help of a horrific nested \code{ifelse}!) handles
-common input formats for months, and returns them in a specified format.
-See the "Accepted Formats" section below.
+function simply handles common input formats for months, and returns them
+in a specified format. See the "Accepted Formats" section below.
 }
 \section{Accepted Formats}{
 Input and output can be in the following formats:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{  1          numeric
-  "1"        string
-  "01"       padded string
-  "Jan"      Capitalised abbreviation
-  "jan"      lower case abbreviation
-  "January"  Capitalised Name
-  "january"  lower case name
-  "J"        Capital initial (only as output)
-  "j"        lower case initial (only as output)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ Input or Output:
+                1       numeric
+              "1"       string
+             "01"       padded string
+            "Jan"       Capitalised abbreviation
+            "jan"       lower case abbreviation
+        "January"       Capitalised Name
+        "january"       lower case name
+
+ Output only:
+              "J"       Capital initial (only as output)
+              "j"       lower case initial (only as output)
 }\if{html}{\out{</div>}}
 
 To re-emphasize, initials \emph{cannot} be used as input because they are
 ambiguous. However, they can be returned if you really want to use them.
+The word "January" can be replaced with the word "Month" for defining the
+output (e.g. output = "Mon").
 }
 
 \seealso{
-retrieve_months
+get_months
 }

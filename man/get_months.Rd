@@ -12,7 +12,8 @@ get_months(x, out = "Jan", throwError = TRUE)
 \item{out}{How should the months be returned? Choose from the options in
 the "Accepted Formats" section. If any other values are used, the numeric
 representation of the month is used (e.g. 1 for January) or the input x
-is just returned if it didn't correspond to a valid month.}
+is just returned if it didn't correspond to a valid month (e.g. 13,
+"madeupember").}
 
 \item{throwError}{If the input format isn't valid, should an error be
 thrown? TRUE by default. If FALSE, a warning is shown, and the input
@@ -23,38 +24,45 @@ value returned as it was.}
 Sometimes it makes sense to use a full date ("15-January-2001"),
 but often it is much more common to use (e.g.) "Jan-15", "January 15", or
 even just in reverse - "2001-January-15". This function simply extracts
-the January part of the date, and returns it in the specified format.
-See "Accepted Formats" below; this is implemented with \code{\link[=handle_months]{handle_months()}}.
-It is also possible to use "asis", which returns the month part as it was
-input (but ignores any day or year parts).
+the "January" part of those dates, and returns it in the specified format.
 
-\strong{Note:} Dates can be separated with any of these: " ", "_", "-", "/".
+See "Accepted Formats" below, which is implemented with \code{\link[=handle_months]{handle_months()}}.
+It is also possible to use "asis", which returns the month part of the
+input as it was entered (whilst ignoring any day or year parts of the
+date).
+
+\strong{Note:} Dates can be separated with any of these: \verb{ } \verb{_} \code{-} \code{/}.
 
 \strong{Note:} The function will not accept dates such as "01-02", because it
 is unclear whether that refers to January 2nd or 1st February. However,
 it understands that "01-13" or "13-01" both refer to January (i.e. there
 is no month 13!).
 
-\strong{Note:} It \strong{will not} accept the MM-DD-YYYY format. It \strong{will}
-accept either DD-MM-YYYY, D-M-YY, or YYYY-MM-DD, etc. The function
-essentially checks if the input has three parts, and returns the middle
-value if so.
+\strong{Note:} This function \strong{will not} accept the MM-DD-YYYY format. It
+\strong{will} accept either DD-MM-YYYY, D-M-YY, or YYYY-MM-DD, etc. The
+function essentially checks if the input has three parts, and returns the
+middle value if so.
 }
 \section{Accepted Formats}{
 Input and output can be in the following formats:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{  1          numeric
-  "1"        string
-  "01"       padded string
-  "Jan"      Capitalised abbreviation
-  "jan"      lower case abbreviation
-  "January"  Capitalised Name
-  "january"  lower case name
-  "J"        Capital initial (only as output)
-  "j"        lower case initial (only as output)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ Input or Output:
+                1       numeric
+              "1"       string
+             "01"       padded string
+            "Jan"       Capitalised abbreviation
+            "jan"       lower case abbreviation
+        "January"       Capitalised Name
+        "january"       lower case name
+
+ Output only:
+              "J"       Capital initial (only as output)
+              "j"       lower case initial (only as output)
 }\if{html}{\out{</div>}}
 
 To re-emphasize, initials \emph{cannot} be used as input because they are
 ambiguous. However, they can be returned if you really want to use them.
+The word "January" can be replaced with the word "Month" for defining the
+output (e.g. output = "Mon").
 }
 
